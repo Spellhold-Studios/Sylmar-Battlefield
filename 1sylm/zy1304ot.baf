@@ -1,0 +1,9 @@
+// timer file for spawn points on map 1304 for Orcs
+
+IF
+	Global("MyOwnTimerSet","LOCALS",1)
+THEN
+	RESPONSE #100
+	SetGlobal("MyOwnTimerSet","LOCALS",0)
+	SetGlobalTimer("MyOwnTimer","LOCALS",120)
+END

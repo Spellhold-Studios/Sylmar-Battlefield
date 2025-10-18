@@ -1,0 +1,78 @@
+// ELVEN script for navigating Map 1800
+
+// jams here
+ 
+IF	Global("Start","LOCALS",0)
+THEN
+	RESPONSE #100
+	NoAction()
+END
+
+// navigation
+
+IF	Range("Zy1800Wa",8)
+	GlobalGT("Start","LOCALS",0)
+	Global("NextDest","LOCALS",1)
+	!GlobalTimerNotExpired("MovingToNext","LOCALS")
+	Global("SetBalrogDialog","Zy1800",0)  // once balrogs spawn all elves gather at the graveyard
+THEN
+	RESPONSE #0
+	RESPONSE #100
+	SetGlobalTimer("MovingToNext","LOCALS",40)
+	SetGlobal("NextDest","LOCALS",2)
+	ChangeAIScript("Zy1800Tb",CLASS)		
+	Continue()
+	RESPONSE #100
+	SetGlobalTimer("MovingToNext","LOCALS",40)
+	SetGlobal("NextDest","LOCALS",3)
+	ChangeAIScript("Zy1800Tc",CLASS)		
+	Continue()
+	RESPONSE #100
+	SetGlobalTimer("MovingToNext","LOCALS",40)
+	SetGlobal("NextDest","LOCALS",4)
+	ChangeAIScript("Zy1800Td",CLASS)		
+	Continue()
+END
+
+IF	Range("Zy1800Wb",8)
+	GlobalGT("Start","LOCALS",0)
+	Global("NextDest","LOCALS",2)
+THEN
+	RESPONSE #100
+	SetGlobalTimer("MovingToNext","LOCALS",40)
+	SetGlobal("NextDest","LOCALS",1)
+	ChangeAIScript("Zy1800Ta",CLASS)		
+	Continue()
+END
+
+IF	Range("Zy1800Wc",8)
+	GlobalGT("Start","LOCALS",0)
+	Global("NextDest","LOCALS",3)
+THEN
+	RESPONSE #100
+	SetGlobalTimer("MovingToNext","LOCALS",40)
+	SetGlobal("NextDest","LOCALS",1)
+	ChangeAIScript("Zy1800Ta",CLASS)		
+	Continue()
+END
+
+IF	Range("Zy1800Wd",8)
+	GlobalGT("Start","LOCALS",0)
+	Global("NextDest","LOCALS",4)
+THEN
+	RESPONSE #100
+	SetGlobalTimer("MovingToNext","LOCALS",40)
+	SetGlobal("NextDest","LOCALS",1)
+	ChangeAIScript("Zy1800Ta",CLASS)		
+	Continue()
+END
+
+IF	Global("NextDest","LOCALS",0)
+	GlobalGT("Start","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobalTimer("MovingToNext","LOCALS",40)
+	SetGlobal("NextDest","LOCALS",1)	
+	ChangeAIScript("Zy1800Ta",CLASS)		
+	Continue()
+END

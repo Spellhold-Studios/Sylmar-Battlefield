@@ -1,0 +1,9 @@
+// special script for Zy1800 LEADERS
+
+IF	Global("SpawnWarden","Zy1800",0)
+THEN	
+	RESPONSE #100
+	SetGlobal("SpawnWarden","Zy1800",1)
+	SetName(@50)
+	ChangeAIScript("Zy18EWRD",CLASS)
+END

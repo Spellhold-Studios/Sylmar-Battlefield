@@ -1,0 +1,10 @@
+// observational script
+
+// for zy1800
+
+IF	AreaCheck("Zy1800")
+	GlobalGT("SetBalrogDialog","Zy1800",4)
+THEN
+	RESPONSE #100
+	DestroySelf()
+END

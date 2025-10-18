@@ -1,0 +1,51 @@
+// Commander Spawn Ratios for Elves, based on maps
+
+IF	Global("SpawnSquadLeader","LOCALS",0)
+	AreaCheck("Zy1800")
+	Global("SpawnWarden","Zy1800",0)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",6)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",0)
+	AreaCheck("Zy1800")
+	DifficultyLT(HARDEST)
+	GlobalGT("SpawnWarden","Zy1800",0)
+THEN
+	RESPONSE #0
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",4)
+	RESPONSE #60
+	SetGlobal("SpawnSquadLeader","LOCALS",5)	
+	RESPONSE #5
+	SetGlobal("SpawnSquadLeader","LOCALS",6)
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",0)
+	AreaCheck("Zy1800")
+	Difficulty(HARDEST)
+	GlobalGT("SpawnWarden","Zy1800",0)
+THEN
+	RESPONSE #0
+	RESPONSE #85
+	SetGlobal("SpawnSquadLeader","LOCALS",4)
+	RESPONSE #15
+	SetGlobal("SpawnSquadLeader","LOCALS",5)	
+END
+
+// default
+
+IF	Global("SpawnSquadLeader","LOCALS",0)
+	!AreaCheck("Zy1800")
+THEN
+	RESPONSE #0
+	RESPONSE #25
+	SetGlobal("SpawnSquadLeader","LOCALS",4)
+	RESPONSE #30
+	SetGlobal("SpawnSquadLeader","LOCALS",5)	
+	RESPONSE #30
+	SetGlobal("SpawnSquadLeader","LOCALS",6)
+	RESPONSE #15
+	SetGlobal("SpawnSquadLeader","LOCALS",8)	
+END

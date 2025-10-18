@@ -1,0 +1,33 @@
+// Spawn Controller for Both Sides
+// for Squads 1-10
+// determines which squad to spawn next
+// determines if squad needs to be spawned in
+// concludes spawn/reinforcement requests to prevent conflicts
+
+// catch all to prevent infinite loops and hence jamming
+// not needed as just a continue() block
+
+// checks number of comms on map
+// set flags IF commanders are to be spawned
+
+IF	Global("ZyxxNeedMoreComm","GLOBAL",1)
+	Global("ZyxxAssignedSquadIn","GLOBAL",0)
+THEN
+	RESPONSE #100
+//	DisplayString(Myself,@253)
+	SetGlobal("ZyxxAssignedSquadIn","GLOBAL",1)
+	Continue()
+END
+
+// assignment can occur while squad is spawning
+
+IF	Global("ZyxxAssignedSquadIn","GLOBAL",2)
+	!GlobalTimerNotExpired("ZyxxAssignTimer","GLOBAL")
+THEN
+	RESPONSE #100
+	SetGlobal("ZyxxAssignedSquadIn","GLOBAL",0)
+	SetGlobalTimer("ZyxxAssignTimer","GLOBAL",5)
+END
+
+// queues the next squad to be spawned
+

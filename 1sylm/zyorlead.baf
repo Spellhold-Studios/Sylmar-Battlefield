@@ -1,0 +1,13 @@
+// DEFAULT ORC assigns the appropriate Leader file to the CRE
+
+IF	AreaCheck("Zy1800")
+THEN
+	RESPONSE #100
+	ChangeAIScript("ZyO1800L",OVERRIDE)
+END
+
+IF	AreaCheck("Zy1304")
+THEN
+	RESPONSE #100
+	ChangeAIScript("ZyO1304L",OVERRIDE)
+END

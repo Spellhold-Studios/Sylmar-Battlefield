@@ -1,0 +1,55 @@
+// ai for anguirel
+
+IF	Global("SetMyTimer","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("SetMyTimer","LOCALS",1)
+	SetGlobalTimer("MyLimitedLifespan","LOCALS",30)
+END
+
+IF	Global("SetMyTimer","LOCALS",1)
+	!GlobalTimerNotExpired("MyLimitedLifeSpan","LOCALS")
+THEN
+	RESPONSE #100
+	CreateVisualEffectObject("ICRMPARI",Myself)
+	DisplayString(Myself,@52)
+	DestroySelf()
+END
+
+IF	OR(2)
+	GlobalGT("EKSSlain","Zy1800",0)
+	Global("EKSLeft","Zy1800",1)
+THEN
+	RESPONSE #100
+	CreateVisualEffectObject("ICRMPARI",Myself)
+	DisplayString(Myself,@52)
+	DestroySelf()
+END
+
+IF	Heard([ANYONE],202)
+	See(LastAttackerOf(LastHeardBy(Myself)))	
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastAttackerOf(LastHeardBy(Myself)),30)
+END
+
+IF	Heard([ANYONE],202)
+	!See(LastAttackerOf(LastHeardBy(Myself)))	
+THEN
+	RESPONSE #100
+	MoveToObject(LastHeardBy(Myself))
+END
+
+IF	See(ThirdNearestEnemyOf(Myself))
+THEN
+	RESPONSE #50
+	AttackReevaluate(ThirdNearestEnemyOf(Myself),18)
+	RESPONSE #50
+	Continue()
+END
+
+IF	See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	AttackReevaluate(NearestEnemyOf(Myself),8)
+END

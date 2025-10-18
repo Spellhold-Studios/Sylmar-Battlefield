@@ -1,0 +1,98 @@
+// elven king shade
+
+IF 	Die()
+THEN
+	RESPONSE #100
+	SetGlobal("EKSSlain","Zy1800",1)
+	DestroySelf()
+	Continue()
+END
+
+// wake
+
+IF	Global("Awaken","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("EKSHere","Zy1800",1)
+	DestroyItem("ZyTDAGN1")
+	SetDialog("Zy18ELSH")
+	StartDialogNoSet([PC])
+END
+
+IF	Global("ZyELflee","GLOBAL",1)
+THEN
+	RESPONSE #100
+	DisplayStringHead(Myself,@54) // rest
+	SetGlobal("EKSLeft","Zy1800",1)
+	DestroySelf()	
+END
+
+IF	Global("ZyElvesWin","Zy1800",1)
+	Global("EKSHere","Zy1800",1)	
+	Global("EKSLeft","Zy1800",0)
+THEN
+	RESPONSE #100
+	StartDialogNoSet([PC])
+END
+// movement
+
+IF	!Range("Zy1800Wa",9)
+	!See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	MoveToObject("Zy1800Wa")
+END
+
+IF	Range("Zy1800Wa",9)
+	!See(NearestEnemyOf(Myself))
+	!GlobalTimerNotExpired("OwnFollowTimer","LOCALS")
+THEN
+	RESPONSE #25
+	SetGlobalTimer("OwnFollowTimer","LOCALS",6)
+	MoveToOffset([3.3])
+	RESPONSE #25
+	SetGlobalTimer("OwnFollowTimer","LOCALS",6)
+	MoveToOffset([-3.-3])
+	RESPONSE #25
+	SetGlobalTimer("OwnFollowTimer","LOCALS",6)
+	MoveToOffset([-3.3])
+	RESPONSE #25
+	SetGlobalTimer("OwnFollowTimer","LOCALS",6)
+	MoveToOffset([3.-3])
+END
+
+// combat
+
+IF	AttackedBy([ANYONE],DEFAULT) 
+	!GlobalTimerNotExpired("ZyShoutT","LOCALS")	
+THEN
+	RESPONSE #100
+	SetGlobalTimer("ZyShoutT","LOCALS",20)
+	Shout(202)
+	Continue()
+END
+
+IF	See(NearestEnemyOf(Myself))
+	!GlobalTimerNotExpired("ZySummSwordT","LOCALS")	
+THEN
+	RESPONSE #50
+	SetGlobalTimer("ZySummSwordT","LOCALS",50)
+	DisplayStringHead(Myself,@51) // dance Anguirel
+	CreateCreatureObjectEffect("Zy18ELSS","SPFLBLAD",Myself)
+	Continue()
+	RESPONSE #50
+	SetGlobalTimer("ZySummSwordT","LOCALS",10)
+	Continue()
+END
+
+IF	Range(SecondNearestEnemyOf(Myself),5)
+	!GlobalTimerNotExpired("ZyFearT","LOCALS")
+THEN
+	RESPONSE #25
+	SetGlobalTimer("ZyFearT","LOCALS",100)
+	SpellNoDec(Myself,CLERIC_CLOAK_OF_FEAR)
+	Continue()
+	RESPONSE #75
+	SetGlobalTimer("ZyFearT","LOCALS",20)
+	Continue()
+END

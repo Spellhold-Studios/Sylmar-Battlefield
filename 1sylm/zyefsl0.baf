@@ -1,0 +1,115 @@
+// generic attack script for Silm everyone
+
+// switches to kit enabled abilities
+
+IF	LevelGT(Myself,12)
+	Global("SwapScriptK","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("SwapScriptK","LOCALS",1)
+//	ChangeAIScript(xxx,DEFAULT)
+END
+
+// EquipRanged()
+// always will use this as long as have ranged attack
+
+// start atk if not in atk based on shouts target
+// if atk started, fight normally
+
+// if commander call for help and in melee, keep fighting melee but try to target commander's target if in range
+// if commander call for help and not in melee, fight range to target
+
+// alignment changes unique to elves
+
+IF	Allegiance(Myself,GOODBUTBLUE)
+	Heard([ANYONE],76)
+THEN
+	RESPONSE #100
+	Shout(76)
+	ChangeEnemyAlly(Myself,GOODBUTRED)
+	Continue()
+END
+
+IF	OR(5)
+		AttackedBy([PC],DEFAULT)
+		AttackedBy([FAMILIAR],DEFAULT)
+		AttackedBy([ALLY],DEFAULT)
+		AttackedBy([CONTROLLED],DEFAULT)
+		AttackedBy([CHARMED],DEFAULT)
+	Allegiance(Myself,GOODBUTBLUE)
+THEN
+	RESPONSE #100
+	Shout(76)
+	ChangeEnemyAlly(Myself,GOODBUTRED)
+	Continue()
+END
+
+// default attack
+
+IF
+	See(NearestEnemyOf(Myself))
+	!Range(NearestEnemyOf(Myself),11)
+	!HasItem("ZyTDAGN1",Myself)
+THEN
+	RESPONSE #100
+	TakeItemReplace("ZYTDAGN1","ZYSW1HN2",Myself)
+	DestroyItem("ZYSHLDN2")
+	EquipRanged()
+	AttackReevaluate( NearestEnemyOf(Myself),8)
+	Continue()
+END
+ 
+IF
+	See(NearestEnemyOf(Myself))
+	!Range(NearestEnemyOf(Myself),11)
+	HasItem("ZyTDAGN1",Myself)
+THEN
+	RESPONSE #100
+	DestroyItem("ZYSHLDN2")
+	EquipRanged()
+	AttackReevaluate( NearestEnemyOf(Myself),8)
+	Continue()
+END
+
+IF
+	See(NearestEnemyOf(Myself))
+	Range(NearestEnemyOf(Myself),11)
+	!Range(NearestEnemyOf(Myself),3)
+THEN
+	RESPONSE #100
+	RunAwayFrom(NearestEnemyOf(Myself),8)
+	Continue()
+END
+
+IF
+	See(NearestEnemyOf(Myself))
+	Range(NearestEnemyOf(Myself),3)
+	HasItem("ZyTDAGN1",Myself)
+THEN
+	RESPONSE #100
+	TakeItemReplace("ZYSW1HN2","ZYTDAGN1",Myself)
+	ReallyForceSpellRES("ZYSHLDN2",Myself)
+	EquipMostDamagingMelee()
+	AttackReevaluate(NearestEnemyOf(Myself),4)
+	Continue()
+END
+
+IF
+	See(NearestEnemyOf(Myself))
+	Range(NearestEnemyOf(Myself),3)
+	!HasItem("ZyTDAGN1",Myself)
+THEN
+	RESPONSE #100
+	EquipMostDamagingMelee()
+	AttackReevaluate(NearestEnemyOf(Myself),4)
+	Continue()
+END
+
+
+IF	AttackedBy([ANYONE],DEFAULT)
+	!Range(LastAttackerOf(Myself),3)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastAttackerOf(Myself),4)
+	Continue()
+END

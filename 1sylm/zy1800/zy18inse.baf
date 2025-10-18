@@ -1,0 +1,16 @@
+// 680.1025 8 to AR1002
+
+IF	Global("ZySpawn18Msgr","AR1002",0)
+THEN
+	RESPONSE #100
+	SetGlobal("ZySpawn18Msgr","AR1002",1)
+	CreateCreature("Zy18MSGR",[680.1025],8) 
+END
+
+IF	GlobalGT("ZyStartSampleBattlefield","GLOBAL",0)
+	Global("ZySpawn18Msgr","AR1002",1)
+THEN
+	RESPONSE #100
+	SetGlobal("ZySpawn18Msgr","AR1002",2)
+	ActionOverride("Zy18MSGR", DestroySelf() )
+END

@@ -1,0 +1,33 @@
+// for Spawn Points
+// each side has up to 10 spawn points per map
+// @ - 0 to 9, indicating the Spawn Point
+// Zyxx - faction
+
+// time for initial activation 
+/*
+IF	Global("Activated","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("Activated","LOCALS",1)
+	SetGlobalTimer("MyOwnTimer","LOCALS",150)
+END
+
+IF	GlobalTimerExpired("MyOwnTimer","LOCALS")
+	Global("ZyxxAssignedSquadIn","GLOBAL",2)
+	Global("ZyxxSpawnEnd","GLOBAL",0)
+	GlobalGT("ZyxxReserveSquads","GLOBAL",0)
+	Global("ZyxxSpawnedSLType","GLOBAL",0)
+	Global("SetLeaderSpawnLevel","LOCALS",1)
+THEN
+	RESPONSE #100
+	DisplayString(Myself,@252)
+	SetGlobalTimer("MyOwnTimer","LOCALS",100)
+	SetGlobal("ZyxxAssignedSquadIn","GLOBAL",3)
+// squad spawn controller
+	SetGlobal("ZyxxSpawnEnd","GLOBAL",1)
+// fixes the next squad to spawn in
+	SetGlobal("ZyxxSpawningInSquad","GLOBAL",0)
+	AddGlobals("ZyxxSpawningInSquad","ZyxxNextSquadIn")
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+END
+*/

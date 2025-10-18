@@ -1,0 +1,45 @@
+// Commander Spawn Ratios for Orcs, based on maps
+
+IF	Global("SpawnSquadLeader","LOCALS",0)
+	AreaCheck("Zy1800")
+	DifficultyLT(HARD)
+THEN
+	RESPONSE #0
+	RESPONSE #10
+	SetGlobal("SpawnSquadLeader","LOCALS",4)
+	RESPONSE #35
+	SetGlobal("SpawnSquadLeader","LOCALS",5)	
+	RESPONSE #40
+	SetGlobal("SpawnSquadLeader","LOCALS",6)
+	RESPONSE #30
+	SetGlobal("SpawnSquadLeader","LOCALS",8)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",0)
+	AreaCheck("Zy1800")
+	DifficultyGT(NORMAL)
+THEN
+	RESPONSE #0
+	RESPONSE #15
+	SetGlobal("SpawnSquadLeader","LOCALS",5)	
+	RESPONSE #30
+	SetGlobal("SpawnSquadLeader","LOCALS",6)
+	RESPONSE #55
+	SetGlobal("SpawnSquadLeader","LOCALS",8)	
+END
+
+// default
+
+IF	Global("SpawnSquadLeader","LOCALS",0)
+	!AreaCheck("Zy1800")
+THEN
+	RESPONSE #0
+	RESPONSE #25
+	SetGlobal("SpawnSquadLeader","LOCALS",4)
+	RESPONSE #30
+	SetGlobal("SpawnSquadLeader","LOCALS",5)	
+	RESPONSE #30
+	SetGlobal("SpawnSquadLeader","LOCALS",6)
+	RESPONSE #15
+	SetGlobal("SpawnSquadLeader","LOCALS",8)	
+END

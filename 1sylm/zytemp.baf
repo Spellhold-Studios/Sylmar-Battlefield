@@ -1,0 +1,61 @@
+// squad code
+
+IF	Heard([ANYONE],%shelatk%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastTargetedBy(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shelatk%)
+	!See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	MoveToObject(LastHeardBy(Myself))
+	Continue()
+END
+
+IF	Heard([ANYONE],%shelhelp%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	Range(NearestEnemyOf(Myself),5)
+	Range(LastTargetedBy(LastHeardBy(Myself)),3)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastAttackerOf(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shelhelp%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastAttackerOf(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shelhelp%)
+	!See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	MoveToObject(LastHeardBy(Myself))
+	Continue()
+END
+
+// shouts if not yet engaged in combat and sees enemy
+
+IF	GlobalGT("ZyELSL%al%Type","GLOBAL",0) 
+	Global("ZyELSquad%al%InFight","GLOBAL",0)
+	See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELSquad%al%InFight","GLOBAL",1)
+	ActionOverride("ZyELSQM%al%",SetGlobal("Start","LOCALS",0))
+	Shout(%shelatk%)
+	AttackReevaluate(LastSeenBy(Myself),30)
+	Continue()
+END

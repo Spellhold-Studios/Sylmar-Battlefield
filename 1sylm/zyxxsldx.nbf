@@ -1,0 +1,164 @@
+// for all Squad Leaders
+
+// 'xx - OR / EL
+// @ - Squad alpha
+// z#z - squad number
+
+// follows the invisible CRE nearby forever 
+
+IF	!InMyArea("ZyxxSQM@")
+THEN
+	RESPONSE #100
+	CreateCreatureObjectOffset("ZyxxSQM@",Myself,[0.0])	
+	Continue()
+END
+
+IF	Global("SquadFollow","LOCALS",0)
+	InMyArea("ZyxxSQM@")
+THEN
+	RESPONSE #100
+	SetGlobal("SquadFollow","LOCALS",1)
+	MoveToObjectFollow("ZyxxSQM@")
+	IncrementGlobal("ZyxxCommInField","GLOBAL",1)
+	Continue()
+END
+
+//	assigns the SL Type value to the squad SL Type variable 
+
+IF	Global("ZyxxSpawnEnd","GLOBAL",1)
+	Global("FixSquadType","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("FixSquadType","LOCALS",1)
+	AddGlobals("ZyxxSL@Type","ZyxxSpawnedSLType")
+	SetGlobal("ZyxxSpawnedSLType","GLOBAL",0)
+	SetGlobal("ZyxxSpawnEnd","GLOBAL",2)
+END 
+
+// maximises troop spawn on creation
+
+IF	GlobalsLT("ZyxxSQ@NumLeft","ZyxxSL@Type")
+	Global("ZyxxSpawnEnd","GLOBAL",2)
+	Global("SquadFullSpawn","LOCALS",0)
+THEN
+	RESPONSE #100
+	IncrementGlobal("ZyxxSQ@NumLeft","GLOBAL",1)
+	CreateCreatureObjectOffset("ZyxxSMAB",Myself,[0.0])	
+END
+
+IF	!GlobalsLT("ZyxxSQ@NumLeft","ZyxxSL@Type")
+	Global("SquadFullSpawn","LOCALS",0)
+	Global("ZyxxSpawnEnd","GLOBAL",2)
+THEN
+	RESPONSE #100
+	SetGlobal("SquadFullSpawn","LOCALS",1)
+	SetGlobal("ZyxxSpawnEnd","GLOBAL",10)
+	SetGlobalTimer("ZyxxReinfSpawnEndTimer","GLOBAL",5)
+	Continue()
+END
+
+// orders troop respawn
+
+IF	GlobalsLT("ZyxxSQ@NumLeft","ZyxxSL@Type")
+	Global("ZyxxSpawnEnd","GLOBAL",0)
+	Global("SquadFullSpawn","LOCALS",1)
+	!GlobalTimerNotExpired("OwnSquadTimer","LOCALS")
+THEN
+	RESPONSE #100
+	SetGlobal("ZyxxSpawnEnd","GLOBAL",10)
+	SetGlobal("ZyxxSpawningInSquad","GLOBAL",z#z)
+	SetGlobalTimer("OwnSquadTimer","LOCALS",60)
+	IncrementGlobal("ZyxxSQ@NumLeft","GLOBAL",1)
+	CreateCreatureObjectOffset("ZyxxSMAB",Myself,[0.0])
+	SetGlobalTimer("ZyxxReinfSpawnEndTimer","GLOBAL",5)
+	Continue()	
+END
+
+// if injured past 50%, calls for help. repeatable in 6 seconds
+// number = xshouthelpx
+
+IF	GlobalGT("ZyxxSL@Type","GLOBAL",0)
+	!GlobalTimerNotExpired("NeedHelp","LOCALS") 
+	HPPercentLT(Myself,50)
+THEN
+	RESPONSE #100
+	SetGlobalTimer("NeedHelp","LOCALS",6) 
+	Shout(xshouthelpx)
+	Continue()
+END
+
+// shouts if not yet engaged in combat and sees enemy
+
+IF	GlobalGT("ZyxxSL@Type","GLOBAL",0) 
+	Global("ZyxxSquad@InFight","GLOBAL",0)
+	See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	SetGlobal("ZyxxSquad@InFight","GLOBAL",1)
+	ActionOverride("ZyxxSQM@",SetGlobal("Stop","LOCALS",1))
+	Shout(xshoutatkx)
+	AttackReevaluate(LastSeenBy(Myself),30)
+	Continue()
+END
+
+// if hears partner alert, all focus fire on enemy
+// number = xshoutatkx
+
+IF	GlobalGT("ZyxxSL@Type","GLOBAL",0) 
+	Heard([ANYONE],xshoutatkx)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyxxSquad@InFight","GLOBAL",1)
+	ActionOverride("ZyxxSQM@",SetGlobal("Stop","LOCALS",1))
+	AttackReevaluate(LastTargetedBy(LastHeardBy(Myself)),30)
+	Continue()
+END
+
+// if not in fight, resets the SquadInFight
+
+IF	GlobalGT("ZyxxSL@Type","GLOBAL",0) 
+	Global("ZyxxSquad@InFight","GLOBAL",1)
+	!See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	SetGlobal("ZyxxSquad@InFight","GLOBAL",0)
+	MoveGlobalObject("ZyxxSQM@",Myself)
+	MoveToObjectFollow("ZyxxSQM@")
+	ActionOverride("ZyxxSQM@",SetGlobal("Stop","LOCALS",0))
+	Continue()
+END
+
+// uses Detect Invisibility
+
+IF	!GlobalTimerNotExpired("HaveInvisFoeAround","LOCALS") 
+	OR(6)
+		Detect(NearestEnemyOf(Myself))
+		Detect(SecondNearestEnemyOf(Myself))
+		Detect(ThirdNearestEnemyOf(Myself))
+		Detect(FourthNearestEnemyOf(Myself))
+		Detect(FifthNearestEnemyOf(Myself))
+		Detect(SixthNearestEnemyOf(Myself))
+	!See(LastHeardBy(Myself))
+	Range(LastHeardBy(Myself),20)
+THEN
+	RESPONSE #0
+	RESPONSE #60
+	SetGlobalTimer("HaveInvisFoeAround","LOCALS",24) 
+	ReallyForceSpell(Myself,WIZARD_DETECT_INVISIBILITY)
+	Continue()
+	RESPONSE #40
+	SetGlobalTimer("HaveInvisFoeAround","LOCALS",6) 
+	Continue()
+END
+
+// adjusts variable once dead, destroys squad marker
+
+IF 	Die()
+THEN
+	RESPONSE #100
+	IncrementGlobal("ZyxxCommInField","GLOBAL",-1)
+	ActionOverride("ZyxxSQM@",DestroySelf())
+	SetGlobal("ZyxxSL@Type","GLOBAL",0)
+END
+
+

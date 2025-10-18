@@ -1,0 +1,115 @@
+// initialisation for squad members
+
+IF	Global("SetGender","LOCALS",0)
+THEN
+	RESPONSE #0
+	RESPONSE #20
+	Polymorph(FIGHTER_FEMALE_HALFORC)
+	SetGlobal("SetGender","LOCALS",1)
+	RESPONSE #80
+	SetGlobal("SetGender","LOCALS",1)
+END	
+
+IF	Global("SetGotRange","LOCALS",0)
+	GlobalGT("SetWeapon","LOCALS",0)
+THEN
+	RESPONSE #0
+	RESPONSE #80
+	SetGlobal("SetGotRange","LOCALS",1)
+	DestroyItem("ZyTAXEN1")
+	RESPONSE #20
+	SetGlobal("SetGotRange","LOCALS",2)
+END
+
+IF	Global("SetHouse","LOCALS",0)
+THEN
+	RESPONSE #0
+	RESPONSE #65
+	SetGlobal("SetHouse","LOCALS",1)
+	RESPONSE #35
+	SetGlobal("SetHouse","LOCALS",1)
+	TakeItemReplace("ZYCHANN1","ZYLEATN1",Myself)
+END
+
+IF	Global("SetWeapon","LOCALS",0)
+THEN
+	RESPONSE #0
+	RESPONSE #5
+	SetGlobal("SetWeapon","LOCALS",1)
+	SetGlobal("SetGotRange","LOCALS",1)
+	DestroyItem("ZyTAXEN1")
+	RESPONSE #5
+	SetGlobal("SetWeapon","LOCALS",1)
+	SetGlobal("SetGotRange","LOCALS",1)
+	DestroyItem("ZyTAXEN1")
+	TakeItemReplace("ZYBLUNN1","ZYAX1HN1",Myself)
+	RESPONSE #5
+	SetGlobal("SetWeapon","LOCALS",1)
+	SetGlobal("SetGotRange","LOCALS",1)
+	DestroyItem("ZyTAXEN1")
+	TakeItemReplace("ZYBLUNN2","ZYAX1HN1",Myself)
+	RESPONSE #5
+	SetGlobal("SetWeapon","LOCALS",1)
+	SetGlobal("SetGotRange","LOCALS",1)
+	DestroyItem("ZyTAXEN1")
+	TakeItemReplace("ZYBLUNN3","ZYAX1HN1",Myself)
+	RESPONSE #5
+	SetGlobal("SetWeapon","LOCALS",1)
+	SetGlobal("SetGotRange","LOCALS",1)
+	DestroyItem("ZyTAXEN1")
+	TakeItemReplace("ZYSCIMIT","ZYAX1HN1",Myself)
+	RESPONSE #25
+	SetGlobal("SetWeapon","LOCALS",2)
+	DestroyItem("ZyOROFN1")
+	TakeItemReplace("ZYHALBN1","ZYAX1HN1",Myself)	
+	RESPONSE #10
+	SetGlobal("SetWeapon","LOCALS",2)
+	RESPONSE #10
+	SetGlobal("SetWeapon","LOCALS",2)
+	TakeItemReplace("ZYBLUNN1","ZYAX1HN1",Myself)
+	RESPONSE #10
+	SetGlobal("SetWeapon","LOCALS",2)
+	TakeItemReplace("ZYBLUNN2","ZYAX1HN1",Myself)
+	RESPONSE #10
+	SetGlobal("SetWeapon","LOCALS",2)
+	TakeItemReplace("ZYBLUNN3","ZYAX1HN1",Myself)
+	RESPONSE #10
+	SetGlobal("SetWeapon","LOCALS",2)
+	TakeItemReplace("ZYSCIMIT","ZYAX1HN1",Myself)
+END
+
+IF	Global("SetWeapon","LOCALS",1)
+THEN
+	RESPONSE #0
+	RESPONSE #10
+	SetGlobal("SetWeapon","LOCALS",2)
+	TakeItemReplace("ZYAX1HN1","ZYOROFN1",Myself)
+	RESPONSE #10
+	SetGlobal("SetWeapon","LOCALS",2)
+	TakeItemReplace("ZYBLUNN1","ZYOROFN1",Myself)
+	RESPONSE #10
+	SetGlobal("SetWeapon","LOCALS",2)
+	TakeItemReplace("ZYBLUNN2","ZYOROFN1",Myself)
+	RESPONSE #10
+	SetGlobal("SetWeapon","LOCALS",2)
+	TakeItemReplace("ZYBLUNN3","ZYOROFN1",Myself)
+	RESPONSE #10
+	SetGlobal("SetWeapon","LOCALS",2)
+	TakeItemReplace("ZYSCIMIT","ZYOROFN1",Myself)
+	RESPONSE #50
+	SetGlobal("SetWeapon","LOCALS",2)
+	TakeItemReplace("ZYSHLDN1","ZYOROFN1",Myself)
+END
+
+IF	Global("ClearThisScript","LOCALS",0)
+	Global("SetHouse","LOCALS",1)
+	Global("SetGender","LOCALS",1)
+	Global("SetWeapon","LOCALS",2)
+	GlobalGT("SetGotRange","LOCALS",0)
+THEN
+	RESPONSE #100
+	DestroyItem("ZyOROFN1")
+	EquipMostDamagingMelee()
+	SetGlobal("ClearThisScript","LOCALS",1)
+	ChangeAIScript("",RACE)		
+END

@@ -1,0 +1,2546 @@
+BACKUP ~1Sylm\backup~
+AUTHOR ~zyraen@hotmail.com~
+// ALWAYS
+//  AT_INTERACTIVE_EXIT ~VIEW readme-btl.html~
+// END
+ASK_EVERY_COMPONENT
+LANGUAGE ~English~
+	      ~English~
+         ~1Sylm\setup.tra~
+
+BEGIN ~Sylmar - Elves vs Orcs~
+REQUIRE_FILE ~Data/25Dialog.bif~ ~You do not appear to have TOB installed.~ 
+
+// generic map controls
+
+// for general Squad Movement Points
+COMPILE ~1Sylm\ZyELNAVG.BAF~
+COMPILE ~1Sylm\ZyORNAVG.BAF~
+
+// for general Squad Leaders
+COMPILE ~1Sylm\ZyELLEAD.BAF~
+COMPILE ~1Sylm\ZyORLEAD.BAF~
+
+// for general Squad Markers
+COMPILE ~1Sylm\ZyESPRAT.BAF~
+COMPILE ~1Sylm\ZyOSPRAT.BAF~
+
+// generic scripts
+COMPILE ~1Sylm\ZyBALROG.BAF~
+COMPILE ~1Sylm\ZyEFRN0.BAF~
+COMPILE ~1Sylm\ZyEFSL0.BAF~
+
+// general observers
+COMPILE ~1Sylm\ZyOBSERV.BAF~
+COPY ~1Sylm\ZyObserv.CRE~ ~override~
+
+// generic spells
+COPY ~1Sylm\NITM~ ~override~ 
+COPY ~1Sylm\NITM\ZySHLDN2.SPL~ ~override~
+SAY NAME1 ~Equip Shield~
+COPY ~1Sylm\SPL\ZyEMREGN.SPL~ ~override~
+SAY NAME1 ~Mass Regeneration~
+COPY ~1Sylm\SPL\ZyBRWHIP.SPL~ ~override~
+SAY NAME1 ~Flaming Whip~
+COPY ~1Sylm\SPL\ZyBRSHLD.SPL~ ~override~
+SAY NAME1 ~Flaming Shield~
+COPY ~1Sylm\SPL\ZyTRUSEE.SPL~ ~override~
+SAY NAME1 ~True Sight~
+
+// Map Zy1304                                                                                                                                                                        
+
+COMPILE ~1Sylm\Zy1304.BAF~
+COMPILE ~1Sylm\ZyEL1304.BAF~
+COMPILE ~1Sylm\ZyOR1304.BAF~
+COMPILE ~1Sylm\Zy1304ET.BAF~
+COMPILE ~1Sylm\Zy1304OT.BAF~
+COPY ~1Sylm\Zy1304.ARE~ ~override~
+
+// Map Zy1800
+
+COPY ~1Sylm\ARE\Zy1800~ ~override~
+
+COPY_EXISTING ~AR1800.TIS~ ~override\Zy1800.TIS~
+COPY_EXISTING ~AR1800.WED~ ~override\Zy1800.WED~
+  WRITE_ASCII 0x24 ~ZY1800~
+COPY_EXISTING ~AR1800LM.BMP~ ~override\Zy1800LM.BMP~
+COPY_EXISTING ~AR1800.MOS~ ~override\ZY1800.MOS~
+
+COPY ~1Sylm\SPL\Zy18ELSS.CRE~ ~override~
+SAY NAME1 ~Dancing Sword~
+SAY NAME2 ~Dancing Sword~
+COPY ~1Sylm\Zy1800\Zy18MSGR.CRE~ ~override~
+SAY NAME1 ~Denaton~
+SAY NAME2 ~Denaton~
+
+COMPILE ~1Sylm\Zy1800\Zy1800.BAF~
+COMPILE ~1Sylm\Zy1800\ZyEL1800.BAF~
+COMPILE ~1Sylm\Zy1800\ZyOR1800.BAF~
+COMPILE ~1Sylm\Zy1800\Zy1800ET.BAF~
+COMPILE ~1Sylm\Zy1800\Zy1800OT.BAF~
+COMPILE ~1Sylm\Zy1800\ZyE1800L.BAF~
+COMPILE ~1Sylm\Zy1800\ZyO1800L.BAF~
+COMPILE ~1Sylm\Zy1800\Zy1800.D~
+COMPILE ~1Sylm\Zy1800\Zy18EWRD.BAF~
+COMPILE ~1Sylm\Zy1800\Zy18ELSH.BAF~
+COMPILE ~1Sylm\Zy1800\Zy18BALR.BAF~
+COMPILE ~1Sylm\Zy1800\Zy18ELSS.BAF~
+EXTEND_TOP ~baldur.bcs~ ~1Sylm\Zy1800\Zy1800RN.BAF~ // penalty for deserting the elves
+EXTEND_TOP ~AR1002.bcs~ ~1Sylm\Zy1800\Zy18inse.BAF~ // penalty for deserting the elves
+
+
+// SQUAD CODE
+
+// generating Squad Markers and Waypoints
+// adjustable number of Squads
+
+COPY ~1Sylm\ZyxxSPWN.baf~ ~override~ // spawning controllers
+
+COPY ~1Sylm\t.txt~ ~override\ZyxxSLSP.baf~
+COPY ~1Sylm\t.txt~ ~override\ZyxxSMSP.baf~
+COPY ~1Sylm\t.txt~ ~override\ZyxxSPWP.baf~
+COPY ~1Sylm\ZyELInit.BAF~ ~override\ZyELInit.BAF~            
+COPY ~1Sylm\ZyORInit.BAF~ ~override\ZyORInit.BAF~            
+
+COPY ~1Sylm\T.txt~ ~def.txt~
+  PATCH_IF (SOURCE_SIZE > 0x01) THEN BEGIN
+    FOR(i=0;i<10;i=i+1) BEGIN
+      INNER_PATCH %abcdefghijklmnopqrstuvwxyz% BEGIN
+        READ_ASCII (i*1) "al" ( 1 )
+      END
+      INNER_ACTION BEGIN
+        COPY ~1Sylm\ZyINVIS.cre~ ~override\ZyELSQM%al%.CRE~
+          SAY NAME1 ~ZyELSQM ~
+          SAY NAME2 ~ZyELSQM ~
+          WRITE_ASCII 0x280 ~ZyELSQM ~
+          WRITE_EVALUATED_ASCII 0x287 "%al%"
+          WRITE_ASCII 0x258 ~ZyESPRAT~
+          WRITE_ASCII 0x260 ~ZyELLDSP~
+          WRITE_ASCII 0x268 ~ZyELNAVG~
+          WRITE_BYTE 0x270 29
+          WRITE_BYTE 0x270 128
+        COPY ~1Sylm\ZyINVIS.cre~ ~override\ZyELSQC%al%.CRE~
+          SAY NAME1 ~ZyELSQC ~
+          SAY NAME2 ~ZyELSQC ~
+          WRITE_ASCII 0x280 ~ZyELSQC ~
+          WRITE_EVALUATED_ASCII 0x287 "%al%"
+          WRITE_ASCII 0x260 ~ZyELSQC ~
+          WRITE_EVALUATED_ASCII 0x267 "%al%"
+        COPY ~1Sylm\ZyINVIS.cre~ ~override\ZyORSQM%al%.CRE~
+          SAY NAME1 ~ZyORSQM ~
+          SAY NAME2 ~ZyORSQM ~
+          WRITE_ASCII 0x280 ~ZyORSQM ~
+          WRITE_EVALUATED_ASCII 0x287 "%al%"
+          WRITE_ASCII 0x258 ~ZyOSPRAT~
+          WRITE_ASCII 0x260 ~ZyORLDSP~
+          WRITE_ASCII 0x268 ~ZyORNAVG~
+          WRITE_BYTE 0x270 202
+          WRITE_BYTE 0x270 128
+        COPY ~1Sylm\ZyINVIS.cre~ ~override\ZyORSQC%al%.CRE~
+          SAY NAME1 ~ZyORSQC ~
+          SAY NAME2 ~ZyORSQC ~
+          WRITE_ASCII 0x280 ~ZyORSQC ~
+          WRITE_EVALUATED_ASCII 0x287 "%al%"
+          WRITE_ASCII 0x260 ~ZyORSQC ~
+          WRITE_EVALUATED_ASCII 0x267 "%al%"
+
+// spawn controller checks which squads are not fielded and assigns them in        
+        APPEND ZyxxSPWP.BAF 
+        ~
+ 	IF	Global("ZyxxSQ%al%NumLeft","GLOBAL",0)
+ 		Global("ZyxxSL%al%Type","GLOBAL",0)
+ 		Global("ZyxxAssignedSquadIn","GLOBAL",1)
+ 		GlobalTimerExpired("MyOwnTimer","LOCALS")
+		Global("MyOwnTimerSet","LOCALS",0)
+ 	THEN
+ 		RESPONSE #100
+		SetGlobal("MyOwnTimerSet","LOCALS",1)
+ 		SetGlobal("ZyxxAssignedSquadIn","GLOBAL",2)
+		IncrementGlobal("ZyxxCommInField","GLOBAL",1)
+		SetGlobal("ZyxxCheckCommNum","GLOBAL",1) 		
+		CreateCreatureObjectOffset("ZyxxSQM%al%",Myself,[0.0])	
+ 	END~
+
+// script determines squad leaders squad        
+ 	APPEND ZyxxSLSP.baf
+ 	~
+	IF	Range("ZyxxSQM%al%",2)
+		Global("ChangedScript","LOCALS",0)
+	THEN
+		RESPONSE #100
+		SetGlobal("ChangedScript","LOCALS",1)
+		ChangeAIScript("ZyxxSLD%al%",GENERAL)		
+	END
+	
+	IF	Race(Myself,ELF)
+		Global("ChangedScript","LOCALS",1)
+	THEN
+		RESPONSE #100
+		SetGlobal("ChangedScript","LOCALS",2)
+		ChangeAIScript("",RACE)		
+	END
+
+	IF	Race(Myself,ORC)
+		Global("ChangedScript","LOCALS",1)
+	THEN
+		RESPONSE #100
+		SetGlobal("ChangedScript","LOCALS",2)
+		ChangeAIScript("ZyORInit",RACE)		
+	END~
+// script determines squad members squad        
+ 	APPEND ZyxxSMSP.baf
+ 	~
+	IF	Range("ZyxxSQM%al%",5)
+		Global("ChangedScript","LOCALS",0)
+		Heard("ZyxxSQM%al%",1192)
+	THEN
+		RESPONSE #100
+		SetGlobal("ChangedScript","LOCALS",1)
+		IncrementGlobal("ZyxxSQ%al%NumLeft","GLOBAL",1)
+		RunAwayFrom("ZyxxSQM%al%",6)
+		ChangeAIScript("ZyxxFOL%al%",GENERAL)
+	END
+
+	IF	Global("WaitAfterShout","LOCALS",0)
+	THEN
+		RESPONSE #100
+		SetGlobal("WaitAfterShout","LOCALS",1)
+		SetGlobalTimer("PostShout","LOCALS",3)
+	END
+
+	IF	Range("ZyxxSQM%al%",4)
+		Global("ChangedScript","LOCALS",0)
+		GlobalTimerExpired("PostShout","LOCALS")
+	THEN
+		RESPONSE #100
+		SetGlobal("ChangedScript","LOCALS",1)
+		IncrementGlobal("ZyxxSQ%al%NumLeft","GLOBAL",1)
+		RunAwayFrom("ZyxxSQM%al%",6)
+		ChangeAIScript("ZyxxFOL%al%",GENERAL)		
+	END
+
+	IF	Race(Myself,ELF)
+		Global("ChangedScript","LOCALS",1)   
+	THEN
+		RESPONSE #100
+		SetGlobal("ChangedScript","LOCALS",2)
+		ChangeAIScript("ZyELInit",RACE)		
+	END
+
+	IF	Race(Myself,ORC)
+		Global("ChangedScript","LOCALS",1)
+	THEN
+		RESPONSE #100
+		SetGlobal("ChangedScript","LOCALS",2)
+		ChangeAIScript("ZyORInit",RACE)		
+	END	
+	~	
+
+// elven house initialisation
+	APPEND ~ZyELInit.baf~
+	~
+	IF	Global("SetHouse","LOCALS",0)
+		Range("ZyELSQM%al%",4)
+		Global("ZyEL%al%House","GLOBAL",3)
+	THEN
+		RESPONSE #100
+		SetGlobal("SetHouse","LOCALS",1)
+		TakeItemReplace("ZYPLATN3","ZYPLATN0",Myself)
+	END
+
+	IF	Global("SetHouse","LOCALS",0)
+		Range("ZyELSQM%al%",4)
+		Global("ZyEL%al%House","GLOBAL",2)
+	THEN
+		RESPONSE #100
+		SetGlobal("SetHouse","LOCALS",1)
+		TakeItemReplace("ZYPLATN2","ZYPLATN0",Myself)
+	END
+
+	IF	Global("SetHouse","LOCALS",0)
+		Range("ZyELSQM%al%",4)
+		Global("ZyEL%al%House","GLOBAL",1)
+	THEN
+		RESPONSE #100
+		SetGlobal("SetHouse","LOCALS",1)
+		TakeItemReplace("ZYPLATN1","ZYPLATN0",Myself)
+	END
+	
+	IF	Global("SetWeapon","LOCALS",0)
+		Range("ZyELSQM%al%",4)
+		Global("ZyEL%al%Weapon","GLOBAL",1)
+		Global("SetGotRange","LOCALS",1)
+	THEN
+		RESPONSE #0
+		RESPONSE #100
+		SetGlobal("SetWeapon","LOCALS",1)
+		TakeItemReplace("ZYSHLDN1","ZyOROFN1",Myself)
+		RESPONSE #100
+		SetGlobal("SetWeapon","LOCALS",1)
+		TakeItemReplace("ZYSW1HN2","ZYSW1HN3",Myself)
+		TakeItemReplace("ZYSHLDN1","ZyOROFN1",Myself)
+		RESPONSE #100
+		SetGlobal("SetWeapon","LOCALS",1)
+		TakeItemReplace("ZYSW1HN1","ZYSW1HN3",Myself)
+		TakeItemReplace("ZYSHLDN1","ZyOROFN1",Myself)
+		RESPONSE #100
+		SetGlobal("SetWeapon","LOCALS",1)
+		TakeItemReplace("ZYSHLDN2","ZyOROFN1",Myself)
+		RESPONSE #100
+		SetGlobal("SetWeapon","LOCALS",1)
+		TakeItemReplace("ZYSW1HN2","ZYSW1HN3",Myself)
+		TakeItemReplace("ZYSHLDN2","ZyOROFN1",Myself)
+		RESPONSE #100
+		SetGlobal("SetWeapon","LOCALS",1)
+		TakeItemReplace("ZYSW1HN1","ZYSW1HN3",Myself)
+		TakeItemReplace("ZYSHLDN2","ZyOROFN1",Myself)
+	END
+
+	IF	Global("SetWeapon","LOCALS",0)
+		Range("ZyELSQM%al%",4)
+		Global("ZyEL%al%Weapon","GLOBAL",2)
+		Global("SetGotRange","LOCALS",1)
+	THEN
+		RESPONSE #0
+		RESPONSE #100
+		SetGlobal("SetWeapon","LOCALS",1)
+		SetGlobal("SetGotRange","LOCALS",1)
+		DestroyItem("ZyTDAGN1")
+		TakeItemReplace("ZYSW1HN3","ZyOROFN1",Myself)
+		RESPONSE #100
+		SetGlobal("SetWeapon","LOCALS",1)
+		SetGlobal("SetGotRange","LOCALS",1)
+		DestroyItem("ZyTDAGN1")
+		TakeItemReplace("ZYSW1HN1","ZYSW1HN3",Myself)
+		TakeItemReplace("ZYSW1HN5","ZyOROFN1",Myself)
+		RESPONSE #100
+		SetGlobal("SetWeapon","LOCALS",1)
+		SetGlobal("SetGotRange","LOCALS",1)
+		DestroyItem("ZyTDAGN1")
+		TakeItemReplace("ZYSW1HN2","ZYSW1HN3",Myself)
+		TakeItemReplace("ZYSW1HN4","ZyOROFN1",Myself)
+	END~
+      END
+    END
+  END
+BUT_ONLY_IF_IT_CHANGES
+
+// compiling the above scripts
+
+COMPILE ~override\ZyELInit.BAF~
+COMPILE ~1Sylm\ZyORInit.BAF~
+
+COPY ~override\ZyxxSPWN.BAF~ ~1Sylm\tempbaf\ZyELSPWN.BAF~
+  REPLACE_TEXTUALLY Zyxx ZyEL
+COMPILE ~1Sylm\tempbaf\ZyELSPWN.BAF~
+
+COPY ~override\ZyxxSPWN.BAF~ ~1Sylm\tempbaf\ZyORSPWN.BAF~
+  REPLACE_TEXTUALLY Zyxx ZyOR
+COMPILE ~1Sylm\tempbaf\ZyORSPWN.BAF~
+
+COPY ~override\ZyxxSPWP.BAF~ ~override\ZyELSPWP.BAF~
+  REPLACE_TEXTUALLY Zyxx ZyEL
+COMPILE ~override\ZyELSPWP.BAF~
+
+COPY ~override\ZyxxSPWP.BAF~ ~override\ZyORSPWP.BAF~
+  REPLACE_TEXTUALLY Zyxx ZyOR
+COMPILE ~override\ZyORSPWP.BAF~
+
+COPY ~override\ZyxxSLSP.BAF~ ~1Sylm\tempbaf\ZyELSLSP.BAF~
+  REPLACE_TEXTUALLY Zyxx ZyEL
+COMPILE ~1Sylm\tempbaf\ZyELSLSP.BAF~
+
+COPY ~override\ZyxxSLSP.BAF~ ~1Sylm\tempbaf\ZyORSLSP.BAF~
+  REPLACE_TEXTUALLY Zyxx ZyOR
+COMPILE ~1Sylm\tempbaf\ZyORSLSP.BAF~
+
+COPY ~override\ZyxxSMSP.BAF~ ~1Sylm\tempbaf\ZyELSMSP.BAF~
+  REPLACE_TEXTUALLY Zyxx ZyEL
+COMPILE ~1Sylm\tempbaf\ZyELSMSP.BAF~
+
+COPY ~override\ZyxxSMSP.BAF~ ~1Sylm\tempbaf\ZyORSMSP.BAF~
+  REPLACE_TEXTUALLY Zyxx ZyOR
+COMPILE ~1Sylm\tempbaf\ZyORSMSP.BAF~
+
+// controlling spawn levels for Squad Leader
+
+COPY ~1Sylm\t.txt~ ~override\ZyxxLDSP.baf~
+
+COPY ~1Sylm\T.txt~ ~def.txt~
+  PATCH_IF (SOURCE_SIZE > 0x01) THEN BEGIN
+    FOR(i=0;i<7;i=i+1) BEGIN
+      INNER_PATCH %abcdefg% BEGIN
+        READ_ASCII (i*1) "al" ( 1 )
+      END
+      SET lvl = 8 + (i*2)
+      SET p1lvl = lvl + 3
+      INNER_ACTION BEGIN
+	COPY ~1Sylm\T.txt~ ~override\ZyELSCR%al%.baf~
+APPEND ~ZyELSCR%al%.baf~
+~
+IF	GlobalGT("SpawnSquadMember","LOCALS",3)
+THEN
+	RESPONSE #100
+	IncrementGlobal("SpawnSquadMember","LOCALS",-4)
+	CreateCreatureObjectOffset("ZyELSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyELSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyELSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyELSMA%al%",Myself,[0.0])	
+	Shout(1192)
+	Continue()
+END
+
+IF	GlobalGT("SpawnSquadMember","LOCALS",1)
+	GlobalLT("SpawnSquadMember","LOCALS",4)
+THEN
+	RESPONSE #100
+	IncrementGlobal("SpawnSquadMember","LOCALS",-2)
+	CreateCreatureObjectOffset("ZyELSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyELSMA%al%",Myself,[0.0])	
+	Shout(1192)
+	Continue()
+END
+
+IF	Global("SpawnSquadMember","LOCALS",1)
+THEN
+	RESPONSE #100
+	SetGlobalTimer("TimerToEndSpawn","LOCALS",10)
+	SetGlobal("SpawnSquadMember","LOCALS",0)
+	CreateCreatureObjectOffset("ZyELSMA%al%",Myself,[0.0])	
+	Shout(1192)
+	Continue()
+END
+
+IF	Global("SpawnSquadMember","LOCALS",0)
+	!GlobalTimerNotExpired("TimerToEndSpawn","LOCALS")
+	Global("Start","LOCALS",0)
+	Global("SetSQCFull","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("SetSQCFull","LOCALS",1)
+	Continue()
+END
+~
+	COPY ~override\ZyELSCR%al%.baf~ ~override\ZyELSCR%al%.bcs~
+	  COMPILE_BAF_TO_BCS
+
+	COPY ~1Sylm\T.txt~ ~override\ZyORSCR%al%.baf~
+APPEND ~ZyORSCR%al%.baf~
+~
+IF	GlobalGT("SpawnSquadMember","LOCALS",3)
+THEN
+	RESPONSE #100
+	IncrementGlobal("SpawnSquadMember","LOCALS",-4)
+	CreateCreatureObjectOffset("ZyORSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyORSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyORSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyORSMA%al%",Myself,[0.0])	
+	Shout(1192)
+	Continue()
+END
+
+IF	GlobalGT("SpawnSquadMember","LOCALS",1)
+	GlobalLT("SpawnSquadMember","LOCALS",4)
+THEN
+	RESPONSE #100
+	IncrementGlobal("SpawnSquadMember","LOCALS",-2)
+	CreateCreatureObjectOffset("ZyORSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyORSMA%al%",Myself,[0.0])	
+	Shout(1192)
+	Continue()
+END
+
+IF	Global("SpawnSquadMember","LOCALS",1)
+THEN
+	RESPONSE #100
+	SetGlobalTimer("TimerToEndSpawn","LOCALS",10)
+	SetGlobal("SpawnSquadMember","LOCALS",0)
+	CreateCreatureObjectOffset("ZyORSMA%al%",Myself,[0.0])	
+	Shout(1192)
+	Continue()
+END
+
+IF	Global("SpawnSquadMember","LOCALS",0)
+	!GlobalTimerNotExpired("TimerToEndSpawn","LOCALS")
+	Global("Start","LOCALS",0)
+	Global("SetSQCFull","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("SetSQCFull","LOCALS",1)
+	Continue()
+END~
+	COPY ~override\ZyORSCR%al%.baf~ ~override\ZyORSCR%al%.bcs~
+	  COMPILE_BAF_TO_BCS
+
+	COPY ~1Sylm\t.txt~ ~override\ZyELSQL%al%.baf~
+APPEND ~ZyELSQL%al%.baf~
+~
+IF	Global("SpawnSquadLeader","LOCALS",4)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyELSpawnedSLType","GLOBAL",4)
+	SetGlobal("SpawnSquadMember","LOCALS",4)
+	IncrementGlobal("ZyELReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyELS1A%al%",Myself,[0.0])
+	ChangeAIScript("ZyELSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",5)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyELSpawnedSLType","GLOBAL",5)
+	SetGlobal("SpawnSquadMember","LOCALS",5)
+	IncrementGlobal("ZyELReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyELS2A%al%",Myself,[0.0])
+	ChangeAIScript("ZyELSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",6)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyELSpawnedSLType","GLOBAL",6)
+	SetGlobal("SpawnSquadMember","LOCALS",6)
+	IncrementGlobal("ZyELReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyELS3A%al%",Myself,[0.0])
+	ChangeAIScript("ZyELSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",8)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyELSpawnedSLType","GLOBAL",8)
+	SetGlobal("SpawnSquadMember","LOCALS",8)
+	IncrementGlobal("ZyELReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyELS4A%al%",Myself,[0.0])
+	ChangeAIScript("ZyELSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",12)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	CreateCreatureObjectEffect("Zy18ESH%al%","SPSUMPLN",Myself)
+	DestroySelf()
+END
+~
+	COPY ~override\ZyELSQL%al%.baf~ ~override\ZyELSQL%al%.bcs~
+	  COMPILE_BAF_TO_BCS
+
+	COPY ~1Sylm\t.txt~ ~override\ZyORSQL%al%.baf~
+APPEND ~ZyORSQL%al%.baf~
+~
+IF	Global("SpawnSquadLeader","LOCALS",4)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyORSpawnedSLType","GLOBAL",4)
+	SetGlobal("SpawnSquadMember","LOCALS",4)
+	IncrementGlobal("ZyORReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyORS1A%al%",Myself,[0.0])
+	ChangeAIScript("ZyORSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",5)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyORSpawnedSLType","GLOBAL",5)
+	SetGlobal("SpawnSquadMember","LOCALS",5)
+	IncrementGlobal("ZyORReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyORS2A%al%",Myself,[0.0])
+	ChangeAIScript("ZyORSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",6)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyORSpawnedSLType","GLOBAL",6)
+	SetGlobal("SpawnSquadMember","LOCALS",6)
+	IncrementGlobal("ZyORReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyORS3A%al%",Myself,[0.0])
+	ChangeAIScript("ZyORSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",8)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyORSpawnedSLType","GLOBAL",8)
+	SetGlobal("SpawnSquadMember","LOCALS",8)
+	IncrementGlobal("ZyORReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyORS4A%al%",Myself,[0.0])
+	ChangeAIScript("ZyORSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",12)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	CreateCreatureObjectOffset("Zy18BAL%al%",Myself,[0.0])
+	DestroySelf()
+END
+~
+	COPY ~override\ZyORSQL%al%.baf~ ~override\ZyORSQL%al%.bcs~
+	  COMPILE_BAF_TO_BCS
+
+APPEND ~ZyxxLDSP.BAF~
+~
+IF	LevelLT(Player1,%p1lvl%)
+	Global("SetLeaderSpawnLevel","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("SetLeaderSpawnLevel","LOCALS",1)
+	ChangeAIScript("ZyxxSQL%al%",GENERAL)
+END~
+      END
+    END
+  END
+BUT_ONLY_IF_IT_CHANGES
+
+COPY ~1Sylm\T.txt~ ~def.txt~
+  PATCH_IF (SOURCE_SIZE > 0x01) THEN BEGIN
+    FOR(i=0;i<6;i=i+1) BEGIN
+      INNER_PATCH %hijklm% BEGIN
+        READ_ASCII (i*1) "al" ( 1 )
+      END
+      SET lvl = 22 + (i*3)
+      SET p1lvl = lvl + 4
+      INNER_ACTION BEGIN
+
+	COPY ~1Sylm\T.txt~ ~override\ZyELSCR%al%.baf~
+APPEND ~ZyELSCR%al%.baf~
+~
+IF	GlobalGT("SpawnSquadMember","LOCALS",3)
+THEN
+	RESPONSE #100
+	IncrementGlobal("SpawnSquadMember","LOCALS",-4)
+	CreateCreatureObjectOffset("ZyELSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyELSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyELSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyELSMA%al%",Myself,[0.0])	
+	Shout(1192)
+	Continue()
+END
+
+IF	GlobalGT("SpawnSquadMember","LOCALS",1)
+	GlobalLT("SpawnSquadMember","LOCALS",4)
+THEN
+	RESPONSE #100
+	IncrementGlobal("SpawnSquadMember","LOCALS",-2)
+	CreateCreatureObjectOffset("ZyELSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyELSMA%al%",Myself,[0.0])	
+	Shout(1192)
+	Continue()
+END
+
+IF	Global("SpawnSquadMember","LOCALS",1)
+THEN
+	RESPONSE #100
+	SetGlobalTimer("TimerToEndSpawn","LOCALS",10)
+	SetGlobal("SpawnSquadMember","LOCALS",0)
+	CreateCreatureObjectOffset("ZyELSMA%al%",Myself,[0.0])	
+	Shout(1192)
+	Continue()
+END
+
+IF	Global("SpawnSquadMember","LOCALS",0)
+	!GlobalTimerNotExpired("TimerToEndSpawn","LOCALS")
+	Global("Start","LOCALS",0)
+	Global("SetSQCFull","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("SetSQCFull","LOCALS",1)
+	Continue()
+END~
+	COPY ~override\ZyELSCR%al%.baf~ ~override\ZyELSCR%al%.bcs~
+	  COMPILE_BAF_TO_BCS
+
+	COPY ~1Sylm\T.txt~ ~override\ZyORSCR%al%.baf~
+APPEND ~ZyORSCR%al%.baf~
+~
+IF	GlobalGT("SpawnSquadMember","LOCALS",3)
+THEN
+	RESPONSE #100
+	IncrementGlobal("SpawnSquadMember","LOCALS",-4)
+	CreateCreatureObjectOffset("ZyORSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyORSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyORSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyORSMA%al%",Myself,[0.0])	
+	Shout(1192)
+	Continue()
+END
+
+IF	GlobalGT("SpawnSquadMember","LOCALS",1)
+	GlobalLT("SpawnSquadMember","LOCALS",4)
+THEN
+	RESPONSE #100
+	IncrementGlobal("SpawnSquadMember","LOCALS",-2)
+	CreateCreatureObjectOffset("ZyORSMA%al%",Myself,[0.0])	
+	CreateCreatureObjectOffset("ZyORSMA%al%",Myself,[0.0])	
+	Shout(1192)
+	Continue()
+END
+
+IF	Global("SpawnSquadMember","LOCALS",1)
+THEN
+	RESPONSE #100
+	SetGlobalTimer("TimerToEndSpawn","LOCALS",10)
+	SetGlobal("SpawnSquadMember","LOCALS",0)
+	CreateCreatureObjectOffset("ZyORSMA%al%",Myself,[0.0])	
+	Shout(1192)
+	Continue()
+END
+
+IF	Global("SpawnSquadMember","LOCALS",0)
+	!GlobalTimerNotExpired("TimerToEndSpawn","LOCALS")
+	Global("Start","LOCALS",0)
+	Global("SetSQCFull","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("SetSQCFull","LOCALS",1)
+	Continue()
+END~
+	COPY ~override\ZyORSCR%al%.baf~ ~override\ZyORSCR%al%.bcs~
+	COMPILE_BAF_TO_BCS
+
+	COPY ~1Sylm\t.txt~ ~override\ZyELSQL%al%.baf~
+APPEND ~ZyELSQL%al%.baf~
+~
+IF	Global("SpawnSquadLeader","LOCALS",4)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyELSpawnedSLType","GLOBAL",4)
+	SetGlobal("SpawnSquadMember","LOCALS",4)
+	IncrementGlobal("ZyELReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyELS1A%al%",Myself,[0.0])
+	ChangeAIScript("ZyELSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",5)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyELSpawnedSLType","GLOBAL",5)
+	SetGlobal("SpawnSquadMember","LOCALS",5)
+	IncrementGlobal("ZyELReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyELS2A%al%",Myself,[0.0])
+	ChangeAIScript("ZyELSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",6)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyELSpawnedSLType","GLOBAL",6)
+	SetGlobal("SpawnSquadMember","LOCALS",6)
+	IncrementGlobal("ZyELReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyELS3A%al%",Myself,[0.0])
+	ChangeAIScript("ZyELSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",8)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyELSpawnedSLType","GLOBAL",8)
+	SetGlobal("SpawnSquadMember","LOCALS",8)
+	IncrementGlobal("ZyELReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyELS4A%al%",Myself,[0.0])
+	ChangeAIScript("ZyELSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",12)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	CreateCreatureObjectEffect("Zy18ESH%al%","SPSUMPLN",Myself)
+	DestroySelf()
+END
+~
+	COPY ~override\ZyELSQL%al%.baf~ ~override\ZyELSQL%al%.bcs~
+	  COMPILE_BAF_TO_BCS
+
+	COPY ~1Sylm\t.txt~ ~override\ZyORSQL%al%.baf~
+APPEND ~ZyORSQL%al%.baf~
+~
+IF	Global("SpawnSquadLeader","LOCALS",4)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyORSpawnedSLType","GLOBAL",4)
+	SetGlobal("SpawnSquadMember","LOCALS",4)
+	IncrementGlobal("ZyORReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyORS1A%al%",Myself,[0.0])
+	ChangeAIScript("ZyORSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",5)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyORSpawnedSLType","GLOBAL",5)
+	SetGlobal("SpawnSquadMember","LOCALS",5)
+	IncrementGlobal("ZyORReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyORS2A%al%",Myself,[0.0])
+	ChangeAIScript("ZyORSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",6)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyORSpawnedSLType","GLOBAL",6)
+	SetGlobal("SpawnSquadMember","LOCALS",6)
+	IncrementGlobal("ZyORReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyORS3A%al%",Myself,[0.0])
+	ChangeAIScript("ZyORSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",8)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	SetGlobal("ZyORSpawnedSLType","GLOBAL",8)
+	SetGlobal("SpawnSquadMember","LOCALS",8)
+	IncrementGlobal("ZyORReserveSquads","GLOBAL",-1)
+	CreateCreatureObjectOffset("ZyORS4A%al%",Myself,[0.0])
+	ChangeAIScript("ZyORSCR%al%",OVERRIDE)	
+END
+
+IF	Global("SpawnSquadLeader","LOCALS",12)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnSquadLeader","LOCALS",1)
+	CreateCreatureObjectOffset("Zy18BAL%al%",Myself,[0.0])
+	DestroySelf()
+END
+~
+	COPY ~override\ZyORSQL%al%.baf~ ~override\ZyORSQL%al%.bcs~
+	  COMPILE_BAF_TO_BCS
+
+APPEND ~ZyxxLDSP.BAF~
+~
+IF	LevelLT(Player1,%p1lvl%)
+	Global("SetLeaderSpawnLevel","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("SetLeaderSpawnLevel","LOCALS",1)
+	ChangeAIScript("ZyxxSQL%al%",GENERAL)
+END~
+
+      END
+    END
+  END
+BUT_ONLY_IF_IT_CHANGES
+
+COPY ~override\ZyxxLDSP.BAF~ ~override\ZyELLDSP.BAF~
+  REPLACE_TEXTUALLY Zyxx ZyEL
+COMPILE ~override\ZyELLDSP.BAF~
+
+COPY ~override\ZyxxLDSP.BAF~ ~override\ZyORLDSP.BAF~
+  REPLACE_TEXTUALLY Zyxx ZyOR
+COMPILE ~override\ZyORLDSP.BAF~
+
+
+// WAYPOINT CODE
+
+// creating BAF for any squad leader to follow basic movement
+// 15 waypoints, inclusive of spawns
+
+// adjustable number of waypoints
+
+COPY ~1Sylm\T.txt~ ~def.baf~
+  PATCH_IF (SOURCE_SIZE > 0x01) THEN BEGIN
+    FOR(i=1;i<16;i=i+1) BEGIN
+      INNER_PATCH %0abcdefghijklmnopqrstuvwxyz% BEGIN
+        READ_ASCII (i*1) "al" ( 1 )
+      END
+      INNER_ACTION BEGIN
+        COPY ~1Sylm\ZyINVIS.cre~ ~override\Zy1304W%al%.CRE~
+          SAY NAME1 ~Zy1304WP~
+          SAY NAME2 ~Zy1304WP~
+          WRITE_ASCII 0x280 ~Zy1304W ~
+          WRITE_EVALUATED_ASCII 0x287 "%al%"
+        
+        COPY ~1Sylm\T.txt~ ~override\Zy1304T%al%.baf~            
+APPEND ~Zy1304T%al%.baf~
+~
+	IF  GlobalGT("Start","LOCALS",0)
+   	    !GlobalTimerNotExpired("Repath","LOCALS")
+	THEN
+	    RESPONSE #100
+	    SetGlobalTimer("Repath","LOCALS",10)
+	    MoveToObject("Zy1304W%al%")
+	    Continue()
+        END~		
+        COPY ~override\Zy1304T%al%.baf~ ~override\Zy1304T%al%.bcs~            
+          COMPILE_BAF_TO_BCS
+
+        COPY ~1Sylm\ZyINVIS.cre~ ~override\Zy1800W%al%.CRE~
+          SAY NAME1 ~Zy1800WP~
+          SAY NAME2 ~Zy1800WP~
+          WRITE_ASCII 0x280 ~Zy1800W ~
+          WRITE_EVALUATED_ASCII 0x287 "%al%"
+        
+        COPY ~1Sylm\T.txt~ ~override\Zy1800T%al%.baf~            
+APPEND ~Zy1800T%al%.baf~
+~
+	IF  GlobalGT("Start","LOCALS",0)
+   	    !GlobalTimerNotExpired("Repath","LOCALS")
+	THEN
+	    RESPONSE #100
+	    SetGlobalTimer("Repath","LOCALS",10)
+	    MoveToObject("Zy1800W%al%")
+	    Continue()
+        END~		
+        COPY ~override\Zy1800T%al%.baf~ ~override\Zy1800T%al%.bcs~            
+          COMPILE_BAF_TO_BCS
+      END
+    END
+  END
+BUT_ONLY_IF_IT_CHANGES
+
+// SQUAD BAFs - for each squad of each faction
+
+COPY ~1Sylm\T.txt~ ~def.txt~
+  PATCH_IF (SOURCE_SIZE > 0x01) THEN BEGIN
+    FOR( i=1 ; i<11 ; i=i+1 ) BEGIN
+      INNER_PATCH %_abcdefghijklmnopqrstuvwxyz% BEGIN
+        READ_ASCII (i*1) "al" ( 1 )
+      END
+      SET shelhelp = 0 + i
+      SET shelatk = 25 + i
+      SET shorhelp = 150 + i
+      SET shoratk = 175 + i
+      INNER_ACTION BEGIN
+
+        COPY ~1Sylm\T.txt~ ~override\ZyELSLD%al%.baf~            
+APPEND ~ZyELSLD%al%.baf~
+~
+// for all Squad Leaders
+
+// 'xx - OR / EL
+// %al% - Squad alpha
+// %i% - squad number
+
+// adjusts variable once dead, destroys squad marker
+
+IF 	Die()
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELSL%al%Type","GLOBAL",0)
+	DestroyAllEquipment()
+//	GiveItemCreate("xxx",Myself,0,0,0)
+END
+
+//	assigns the SL Type value to the squad SL Type variable 
+
+IF	Global("SetSqHouse","LOCALS",0)
+	Global("FixSquadType","LOCALS",0)
+	Global("SetSqWeapon","LOCALS",0)
+THEN
+	RESPONSE #0
+	RESPONSE #100
+	SetGlobal("SetSqHouse","LOCALS",1)
+	SetGlobal("ZyEL%al%House","GLOBAL",1)
+	SetGlobal("SetHouse","LOCALS",1)
+	TakeItemReplace("ZYPLATN1","ZYPLATN0",Myself)
+	RESPONSE #100
+	SetGlobal("SetSqHouse","LOCALS",1)
+	SetGlobal("ZyEL%al%House","GLOBAL",2)
+	SetGlobal("SetHouse","LOCALS",1)
+	TakeItemReplace("ZYPLATN2","ZYPLATN0",Myself)
+	RESPONSE #100
+	SetGlobal("SetSqHouse","LOCALS",1)
+	SetGlobal("ZyEL%al%House","GLOBAL",3)
+	SetGlobal("SetHouse","LOCALS",1)
+	TakeItemReplace("ZYPLATN3","ZYPLATN0",Myself)
+END
+
+IF	Global("SetSqHouse","LOCALS",1)
+	Global("FixSquadType","LOCALS",0)
+	Global("SetSqWeapon","LOCALS",0)
+THEN
+	RESPONSE #0
+	RESPONSE #300
+	SetGlobal("SetSqWeapon","LOCALS",1)
+	SetGlobal("ZyEL%al%Weapon","GLOBAL",1)
+	SetGlobal("SetWeapon","LOCALS",1)
+	SetGlobal("SetGotRange","LOCALS",2)
+	DestroyItem("ZyOROFN1")
+	DestroyItem("ZySW1HN3")
+	ChangeAIScript("ZYEFSL0",DEFAULT)
+	EquipRanged()
+	
+	RESPONSE #100
+	SetGlobal("SetSqWeapon","LOCALS",1)
+	SetGlobal("ZyEL%al%Weapon","GLOBAL",2)
+	SetGlobal("SetWeapon","LOCALS",1)
+	SetGlobal("SetGotRange","LOCALS",1)
+	DestroyItem("ZyTDAGN1")
+	TakeItemReplace("ZYSW1HN4","ZYOROFN1",Myself)
+	RESPONSE #100
+	SetGlobal("SetSqWeapon","LOCALS",1)
+	SetGlobal("ZyEL%al%Weapon","GLOBAL",2)
+	SetGlobal("SetWeapon","LOCALS",1)
+	SetGlobal("SetGotRange","LOCALS",1)
+	DestroyItem("ZyTDAGN1")
+	TakeItemReplace("ZYSW1HN1","ZYSW1HN3",Myself)
+	TakeItemReplace("ZYSW1HN5","ZyOROFN1",Myself)
+	RESPONSE #100
+	SetGlobal("SetSqWeapon","LOCALS",1)
+	SetGlobal("ZyEL%al%Weapon","GLOBAL",2)
+	SetGlobal("SetWeapon","LOCALS",1)
+	SetGlobal("SetGotRange","LOCALS",1)
+	DestroyItem("ZyTDAGN1")
+	TakeItemReplace("ZYSW1HN2","ZYSW1HN3",Myself)
+	TakeItemReplace("ZYSW1HN4","ZyOROFN1",Myself)
+END
+
+IF	Global("FixSquadType","LOCALS",0)
+	Global("SetSqWeapon","LOCALS",1)
+	Global("SetSqHouse","LOCALS",1)
+THEN
+	RESPONSE #0
+	RESPONSE #100
+	SetGlobal("FixSquadType","LOCALS",1)
+	AddGlobals("ZyELSL%al%Type","ZyELSpawnedSLType")
+	SetGlobal("ZyELSpawnedSLType","GLOBAL",0)
+	CreateCreatureObjectOffset("ZyELSQC%al%",Myself,[0.-2000])	
+	Continue()
+	RESPONSE #100
+	SetGlobal("FixSquadType","LOCALS",1)
+	AddGlobals("ZyELSL%al%Type","ZyELSpawnedSLType")
+	SetGlobal("ZyELSpawnedSLType","GLOBAL",0)
+	CreateCreatureObjectOffset("ZyELSQC%al%",Myself,[0.-2000])	
+	Continue()
+	RESPONSE #100
+	SetGlobal("FixSquadType","LOCALS",1)
+	AddGlobals("ZyELSL%al%Type","ZyELSpawnedSLType")
+	SetGlobal("ZyELSpawnedSLType","GLOBAL",0)
+	CreateCreatureObjectOffset("ZyELSQC%al%",Myself,[0.-2000])	
+	Continue()
+END 
+
+IF	!See(NearestEnemyOf(Myself))
+	InMyArea("ZyELSQM%al%")
+	!Range("ZyELSQM%al%",8)
+	!GlobalTimerNotExpired("OwnFollowTimer","LOCALS")
+THEN
+	RESPONSE #100
+	SetGlobalTimer("OwnFollowTimer","LOCALS",5)
+	MoveToObjectFollow("ZyELSQM%al%")
+	Continue()
+END
+
+// if injured past 50, calls for help. repeatable in 6 seconds
+// number = %shelhelp%
+
+IF	!GlobalTimerNotExpired("NeedHelp","LOCALS") 
+	HPPercentLT(Myself,50)
+THEN
+	RESPONSE #100
+	SetGlobalTimer("NeedHelp","LOCALS",12) 
+	Shout(%shelhelp%)
+	Continue()
+END
+
+// squad code
+
+IF	Heard([ANYONE],%shelatk%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastTargetedBy(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shelatk%)
+	!See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	MoveToObject(LastHeardBy(Myself))
+	Continue()
+END
+
+IF	Heard([ANYONE],%shelhelp%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	Range(NearestEnemyOf(Myself),5)
+	Range(LastTargetedBy(LastHeardBy(Myself)),3)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastAttackerOf(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shelhelp%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastAttackerOf(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shelhelp%)
+	!See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	MoveToObject(LastHeardBy(Myself))
+	Continue()
+END
+
+// shouts if not yet engaged in combat and sees enemy
+
+IF	GlobalGT("ZyELSL%al%Type","GLOBAL",0) 
+	Global("ZyELSquad%al%InFight","GLOBAL",0)
+	See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELSquad%al%InFight","GLOBAL",1)
+	ActionOverride("ZyELSQM%al%",SetGlobal("Start","LOCALS",0))
+	MoveGlobalObject("ZyELSQM%al%",Myself)
+	Shout(%shelatk%)
+	AttackReevaluate(LastSeenBy(Myself),8)
+	Continue()
+END
+
+IF	GlobalGT("ZyELSL%al%Type","GLOBAL",0) 
+	Global("ZyELSquad%al%InFight","GLOBAL",1)
+	See(NearestEnemyOf(Myself))
+	!Range("ZyELSQM%al%",2)
+THEN
+	RESPONSE #100
+	MoveGlobalObject("ZyELSQM%al%",Myself)
+	AttackReevaluate(LastSeenBy(Myself),8)
+	Continue()
+END
+
+// if not in fight, resets the SquadInFight
+
+IF	Global("ZyELSquad%al%InFight","GLOBAL",1)
+	Global("MySquadFull","LOCALS",1)
+	!See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELSquad%al%InFight","GLOBAL",0)
+	MoveGlobalObject("ZyELSQM%al%",Myself)
+	ActionOverride("ZyELSQM%al%",SetGlobal("Start","LOCALS",1))
+	MoveToObjectFollow("ZyELSQM%al%")
+	Continue()
+END
+
+IF	Global("ZyELSquad%al%InFight","GLOBAL",0)
+	Global("MySquadFull","LOCALS",1)
+	!See(NearestEnemyOf(Myself))
+	!Range("ZyELSQM%al%",20)
+THEN
+	RESPONSE #100
+	MoveGlobalObject("ZyELSQM%al%",Myself)
+	ActionOverride("ZyELSQM%al%",SetGlobal("Start","LOCALS",1))
+	MoveToObjectFollow("ZyELSQM%al%")
+	Continue()
+END
+	
+// uses Detect Invisibility
+
+IF	!GlobalTimerNotExpired("HaveInvisFoeAround","LOCALS") 
+	OR(6)
+		Detect(NearestEnemyOf(Myself))
+		Detect(SecondNearestEnemyOf(Myself))
+		Detect(ThirdNearestEnemyOf(Myself))
+		Detect(FourthNearestEnemyOf(Myself))
+		Detect(FifthNearestEnemyOf(Myself))
+		Detect(SixthNearestEnemyOf(Myself))
+	!See(LastSeenBy(Myself))
+	Range(LastSeenBy(Myself),20)
+THEN
+	RESPONSE #0
+	RESPONSE #60
+	SetGlobalTimer("HaveInvisFoeAround","LOCALS",24) 
+	ReallyForceSpell(Myself,WIZARD_DETECT_INVISIBILITY)
+	Continue()
+	RESPONSE #40
+	SetGlobalTimer("HaveInvisFoeAround","LOCALS",6) 
+	Continue()
+END
+
+// immediately retreat
+
+IF	Global("ZyELflee","GLOBAL",1)
+THEN
+	RESPONSE #100
+	Actionoverride("ZyELSQM%al%",DestroySelf())
+	Actionoverride("ZyELSQC%al%",DestroySelf())
+	EscapeArea()
+END
+
+// activates when squad is full
+
+IF	!GlobalsLT("ZyELSQ%al%NumLeft","ZyELSL%al%Type")
+	Global("MySquadFull","LOCALS",0)
+THEN
+	RESPONSE #100
+	TakeItemReplace("ZyREG2P3","ZYINVULN",Myself)
+	SetGlobal("MySquadFull","LOCALS",1)
+END~
+        COPY ~override\ZyELSLD%al%.baf~ ~override\ZyELSLD%al%.bcs~            
+	  COMPILE_BAF_TO_BCS
+
+        COPY ~1Sylm\T.txt~ ~override\ZyORSLD%al%.baf~            
+APPEND ~ZyORSLD%al%.baf~
+~
+// for all Squad Leaders
+
+// 'xx - OR / EL
+// %al% - Squad alpha
+// %i% - squad number
+
+// adjusts variable once dead, destroys squad marker
+
+IF 	Die()
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORSL%al%Type","GLOBAL",0)
+	DestroyAllEquipment()
+//	GiveItemCreate("xxx",Myself,0,0,0)
+END
+
+//	assigns the SL Type value to the squad SL Type variable 
+
+IF	Global("FixSquadType","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("FixSquadType","LOCALS",1)
+	AddGlobals("ZyORSL%al%Type","ZyORSpawnedSLType")
+	SetGlobal("ZyORSpawnedSLType","GLOBAL",0)
+	CreateCreatureObjectOffset("ZyORSQC%al%",Myself,[0.2000])	
+	Continue()
+END 
+
+IF	!See(NearestEnemyOf(Myself))
+	InMyArea("ZyORSQM%al%")
+	!Range("ZyORSQM%al%",8)
+	!GlobalTimerNotExpired("OwnFollowTimer","LOCALS")
+THEN
+	RESPONSE #100
+	SetGlobalTimer("OwnFollowTimer","LOCALS",5)
+	MoveToObjectFollow("ZyORSQM%al%")
+	Continue()
+END
+
+// if injured past 50, calls for help. repeatable in 6 seconds
+// number = %shorhelp%
+
+IF	!GlobalTimerNotExpired("NeedHelp","LOCALS") 
+	HPPercentLT(Myself,50)
+THEN
+	RESPONSE #100
+	SetGlobalTimer("NeedHelp","LOCALS",12) 
+	Shout(%shorhelp%)
+	Continue()
+END
+
+// squad code
+
+IF	Heard([ANYONE],%shoratk%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastTargetedBy(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shoratk%)
+	!See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	MoveToObject(LastHeardBy(Myself))
+	Continue()
+END
+
+IF	Heard([ANYONE],%shorhelp%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	Range(NearestEnemyOf(Myself),5)
+	Range(LastTargetedBy(LastHeardBy(Myself)),3)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastAttackerOf(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shorhelp%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastAttackerOf(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shorhelp%)
+	!See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	MoveToObject(LastHeardBy(Myself))
+	Continue()
+END
+
+// shouts if not yet engaged in combat and sees enemy
+
+IF	GlobalGT("ZyORSL%al%Type","GLOBAL",0) 
+	Global("ZyORSquad%al%InFight","GLOBAL",0)
+	See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORSquad%al%InFight","GLOBAL",1)
+	ActionOverride("ZyORSQM%al%",SetGlobal("Start","LOCALS",0))
+	MoveGlobalObject("ZyORSQM%al%",Myself)
+	Shout(%shoratk%)
+	AttackReevaluate(LastSeenBy(Myself),8)
+	Continue()
+END
+
+IF	GlobalGT("ZyORSL%al%Type","GLOBAL",0) 
+	Global("ZyORSquad%al%InFight","GLOBAL",1)
+	See(NearestEnemyOf(Myself))
+	!Range("ZyORSQM%al%",2)
+THEN
+	RESPONSE #100
+	MoveGlobalObject("ZyORSQM%al%",Myself)
+	AttackReevaluate(LastSeenBy(Myself),8)
+	Continue()
+END
+
+// if not in fight, resets the SquadInFight
+
+IF	Global("ZyORSquad%al%InFight","GLOBAL",1)
+	Global("MySquadFull","LOCALS",1)
+	!See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORSquad%al%InFight","GLOBAL",0)
+	MoveGlobalObject("ZyORSQM%al%",Myself)
+	ActionOverride("ZyORSQM%al%",SetGlobal("Start","LOCALS",1))
+	MoveToObjectFollow("ZyORSQM%al%")
+	Continue()
+END
+
+IF	Global("ZyORSquad%al%InFight","GLOBAL",0)
+	Global("MySquadFull","LOCALS",1)
+	!See(NearestEnemyOf(Myself))
+	!Range("ZyORSQM%al%",20)
+THEN
+	RESPONSE #100
+	MoveGlobalObject("ZyORSQM%al%",Myself)
+	ActionOverride("ZyORSQM%al%",SetGlobal("Start","LOCALS",1))
+	MoveToObjectFollow("ZyORSQM%al%")
+	Continue()
+END
+
+// uses Detect Invisibility
+
+IF	!GlobalTimerNotExpired("HaveInvisFoeAround","LOCALS") 
+	OR(6)
+		Detect(NearestEnemyOf(Myself))
+		Detect(SecondNearestEnemyOf(Myself))
+		Detect(ThirdNearestEnemyOf(Myself))
+		Detect(FourthNearestEnemyOf(Myself))
+		Detect(FifthNearestEnemyOf(Myself))
+		Detect(SixthNearestEnemyOf(Myself))
+	!See(LastSeenBy(Myself))
+	Range(LastSeenBy(Myself),20)
+THEN
+	RESPONSE #0
+	RESPONSE #60
+	SetGlobalTimer("HaveInvisFoeAround","LOCALS",24) 
+	ReallyForceSpell(Myself,WIZARD_DETECT_INVISIBILITY)
+	Continue()
+	RESPONSE #40
+	SetGlobalTimer("HaveInvisFoeAround","LOCALS",6) 
+	Continue()
+END
+
+// immediately retreat
+
+IF	Global("ZyORflee","GLOBAL",1)
+THEN
+	RESPONSE #100
+	Actionoverride("ZyORSQM%al%",DestroySelf())
+	Actionoverride("ZyORSQC%al%",DestroySelf())
+	EscapeArea()
+END
+
+// activates when squad is full
+
+IF	!GlobalsLT("ZyORSQ%al%NumLeft","ZyORSL%al%Type")
+	Global("MySquadFull","LOCALS",0)
+THEN
+	RESPONSE #100
+	TakeItemReplace("ZyREG2P3","ZYINVULN",Myself)
+	SetGlobal("MySquadFull","LOCALS",1)
+END~
+
+        COPY ~override\ZyORSLD%al%.baf~ ~override\ZyORSLD%al%.bcs~            
+          COMPILE_BAF_TO_BCS
+
+        COPY ~1Sylm\T.txt~ ~override\ZyELFOL%al%.baf~            
+APPEND ~ZyELFOL%al%.baf~
+~
+// for All Squad Members
+
+// 'xx - OR / EL
+// %al% - Squad alpha
+// z#z - Squad number
+
+IF	!GlobalTimerNotExpired("OwnFollowTimer","LOCALS")
+	Range("ZyELSQM%al%",5)
+	Global("ClearThisScript","LOCALS",1)
+THEN
+	RESPONSE #0
+	RESPONSE #25
+	SetGlobalTimer("OwnFollowTimer","LOCALS",3)
+	MoveToOffset([4.4])
+	RESPONSE #25
+	SetGlobalTimer("OwnFollowTimer","LOCALS",3)
+	MoveToOffset([-4.-4])
+	RESPONSE #25
+	SetGlobalTimer("OwnFollowTimer","LOCALS",3)
+	MoveToOffset([-4.4])
+	RESPONSE #25
+	SetGlobalTimer("OwnFollowTimer","LOCALS",3)
+	MoveToOffset([4.-4])
+END
+
+// adjusts variable indicative of how many squad members left
+
+IF 	Die()
+THEN
+	RESPONSE #100
+	IncrementGlobal("ZyELSQ%al%NumLeft","GLOBAL",-1)
+	DestroyAllEquipment()
+//	GiveItemCreate("xxx",Myself,0,0,0)
+END
+
+// removes the Ring that regenerates
+
+IF 	Global("ZyELSL%al%Type","GLOBAL",0) 
+	HasItem("ZyREG1P3",Myself)
+THEN
+	RESPONSE #100
+	TakeItemReplace("ZyRINGN2","ZyREG1P3",Myself)
+	EquipItem("ZyRINGN2")
+	Continue()
+END
+
+// squad code
+
+IF	Heard([ANYONE],%shelatk%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastTargetedBy(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shelatk%)
+	!See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	MoveToObject(LastHeardBy(Myself))
+	Continue()
+END
+
+IF	Heard([ANYONE],%shelhelp%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	Range(NearestEnemyOf(Myself),5)
+	Range(LastTargetedBy(LastHeardBy(Myself)),3)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastAttackerOf(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shelhelp%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastAttackerOf(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shelhelp%)
+	!See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	MoveToObject(LastHeardBy(Myself))
+	Continue()
+END
+
+// shouts if not yet engaged in combat and sees enemy
+
+IF	GlobalGT("ZyELSL%al%Type","GLOBAL",0) 
+	Global("ZyELSquad%al%InFight","GLOBAL",0)
+	See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	ActionOverride("ZyELSQM%al%",SetGlobal("Start","LOCALS",0))
+	Shout(%shelatk%)
+	AttackReevaluate(LastSeenBy(Myself),8)
+	Continue()
+END
+
+// if cannot see squad Marker, jump to near Squad Marker
+
+IF	!See(NearestEnemyOf(Myself))
+	!Detect("ZyELSQM%al%")
+	GlobalGT("ZyELSL%al%Type","GLOBAL",0) 
+THEN
+	RESPONSE #100
+	MoveGlobalObject(Myself,"ZyELSQM%al%")
+	MoveToObjectFollow("ZyELSQM%al%")
+	Continue()
+END
+
+// if near Squad Marker, move to Squad Marker
+
+IF	!See(NearestEnemyOf(Myself))
+	Detect("ZyELSQM%al%")
+	GlobalGT("ZyELSL%al%Type","GLOBAL",0) 
+	!GlobalTimerNotExpired("OwnFollowTimer","LOCALS")
+THEN
+	RESPONSE #100
+	SetGlobalTimer("OwnFollowTimer","LOCALS",8)
+	MoveToObjectFollow("ZyELSQM%al%")
+	Continue()
+END
+
+// immediately retreat
+
+IF	Global("ZyELflee","GLOBAL",1)
+THEN
+	RESPONSE #100
+	IncrementGlobal("ZyELSQ%al%NumLeft","GLOBAL",-1)
+	EscapeArea()
+END
+
+// if commander is dead, set a Timer and then randomwalk()
+
+IF	Global("ZyELSL%al%Type","GLOBAL",0) 
+	Global("RetreatTimerSet","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("RetreatTimerSet","LOCALS",1)
+	SetGlobalTimer("RetreatTimer","LOCALS",200) // 3 mins
+	Continue()
+END
+
+// randomly walk around before retreat timer expires
+
+IF	!GlobalTimerExpired("RetreatTimer","LOCALS")
+	Global("RetreatTimerSet","LOCALS",1)
+	!See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	RandomWalk()
+	Continue()
+END
+
+// EscapeArea if retreat timer expires
+
+IF	GlobalTimerExpired("RetreatTimer","LOCALS")
+	Global("RetreatTimerSet","LOCALS",1)
+//	!See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	IncrementGlobal("ZyELSQ%al%NumLeft","GLOBAL",-1)
+	EscapeArea()
+END
+~
+        COPY ~override\ZyELFOL%al%.baf~ ~override\ZyELFOL%al%.bcs~            
+	  COMPILE_BAF_TO_BCS
+
+        COPY ~1Sylm\T.txt~ ~override\ZyORFOL%al%.baf~            
+APPEND ~ZyORFOL%al%.baf~
+~// for All Squad Members
+
+// 'xx - OR / EL
+// %al% - Squad alpha
+// z#z - Squad number
+
+IF	!GlobalTimerNotExpired("OwnFollowTimer","LOCALS")
+	Range("ZyORSQM%al%",5)
+	Global("ClearThisScript","LOCALS",1)
+THEN
+	RESPONSE #0
+	RESPONSE #25
+	SetGlobalTimer("OwnFollowTimer","LOCALS",3)
+	MoveToOffset([4.4])
+	RESPONSE #25
+	SetGlobalTimer("OwnFollowTimer","LOCALS",3)
+	MoveToOffset([-4.-4])
+	RESPONSE #25
+	SetGlobalTimer("OwnFollowTimer","LOCALS",3)
+	MoveToOffset([-4.4])
+	RESPONSE #25
+	SetGlobalTimer("OwnFollowTimer","LOCALS",3)
+	MoveToOffset([4.-4])
+END
+
+// adjusts variable indicative of how many squad members left
+
+IF 	Die()
+THEN
+	RESPONSE #100
+	IncrementGlobal("ZyORSQ%al%NumLeft","GLOBAL",-1)
+	DestroyAllEquipment()
+//	GiveItemCreate("xxx",Myself,0,0,0)
+END
+
+// removes the Ring that regenerates
+
+IF 	Global("ZyORSL%al%Type","GLOBAL",0) 
+	HasItem("ZyREG1P3",Myself)
+THEN
+	RESPONSE #100
+	TakeItemReplace("ZyRINGN2","ZyREG1P3",Myself)
+	EquipItem("ZyRINGN2")
+	Continue()
+END
+
+// squad code
+
+IF	Heard([ANYONE],%shoratk%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastTargetedBy(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shoratk%)
+	!See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	MoveToObject(LastHeardBy(Myself))
+	Continue()
+END
+
+IF	Heard([ANYONE],%shorhelp%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	Range(NearestEnemyOf(Myself),5)
+	Range(LastTargetedBy(LastHeardBy(Myself)),3)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastAttackerOf(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shorhelp%)
+	See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastAttackerOf(LastHeardBy(Myself)),4)
+	Continue()
+END
+
+IF	Heard([ANYONE],%shorhelp%)
+	!See(LastTargetedBy(LastHeardBy(Myself)))
+	!Range(NearestEnemyOf(Myself),5)
+THEN
+	RESPONSE #100
+	MoveToObject(LastHeardBy(Myself))
+	Continue()
+END
+
+// shouts if not yet engaged in combat and sees enemy
+
+IF	GlobalGT("ZyORSL%al%Type","GLOBAL",0) 
+	Global("ZyORSquad%al%InFight","GLOBAL",0)
+	See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	ActionOverride("ZyORSQM%al%",SetGlobal("Start","LOCALS",0))
+	Shout(%shoratk%)
+	AttackReevaluate(LastSeenBy(Myself),8)
+	Continue()
+END
+
+// if cannot see squad Marker, jump to near Squad Marker
+
+IF	!See(NearestEnemyOf(Myself))
+	!Detect("ZyORSQM%al%")
+	GlobalGT("ZyORSL%al%Type","GLOBAL",0) 
+THEN
+	RESPONSE #100
+	MoveGlobalObject(Myself,"ZyORSQM%al%")
+	MoveToObjectFollow("ZyORSQM%al%")
+	Continue()
+END
+
+// if near Squad Marker, move to Squad Marker
+
+IF	!See(NearestEnemyOf(Myself))
+	Detect("ZyORSQM%al%")
+	GlobalGT("ZyORSL%al%Type","GLOBAL",0) 
+	!GlobalTimerNotExpired("OwnFollowTimer","LOCALS")
+THEN
+	RESPONSE #100
+	SetGlobalTimer("OwnFollowTimer","LOCALS",5)
+	MoveToObjectFollow("ZyORSQM%al%")
+	Continue()
+END
+
+// immediately retreat
+
+IF	Global("ZyORflee","GLOBAL",1)
+THEN
+	RESPONSE #100
+	IncrementGlobal("ZyORSQ%al%NumLeft","GLOBAL",-1)
+	EscapeArea()
+END
+
+// if commander is dead, set a Timer and then randomwalk()
+
+IF	Global("ZyORSL%al%Type","GLOBAL",0) 
+	Global("RetreatTimerSet","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("RetreatTimerSet","LOCALS",1)
+	SetGlobalTimer("RetreatTimer","LOCALS",200) // 3 mins
+	Continue()
+END
+
+// randomly walk around before retreat timer expires
+
+IF	!GlobalTimerExpired("RetreatTimer","LOCALS")
+	Global("RetreatTimerSet","LOCALS",1)
+	!See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	RandomWalk()
+	Continue()
+END
+
+// EscapeArea if retreat timer expires
+
+IF	GlobalTimerExpired("RetreatTimer","LOCALS")
+	!See(NearestEnemyOf(Myself))
+	Global("RetreatTimerSet","LOCALS",1)
+THEN
+	RESPONSE #100
+	IncrementGlobal("ZyORSQ%al%NumLeft","GLOBAL",-1)
+	EscapeArea()
+END
+~ 
+        COPY ~override\ZyORFOL%al%.baf~ ~override\ZyORFOL%al%.bcs~            
+	  COMPILE_BAF_TO_BCS
+
+        COPY ~1Sylm\T.txt~ ~override\ZyELSQC%al%.baf~            
+APPEND ~ZyELSQC%al%.baf~
+~// script for Elven Squad Counts
+
+// Destroys self if Commander is dead
+
+IF	Global("ZyELSL%al%Type","GLOBAL",0)
+	Global("SquadFullSpawn","LOCALS",1)
+THEN
+	RESPONSE #100
+	ActionOverride("ZyELSQM%al%",DestroySelf())
+	IncrementGlobal("ZyELCommInField","GLOBAL",-1)
+	SetGlobal("ZyELCheckCommNum","GLOBAL",1)
+	DestroySelf()
+END
+
+IF	Global("ZyELSL%al%Type","GLOBAL",0)
+	Global("SquadFullSpawn","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobalTimer("ZyELReinfSpawnEndTimer","GLOBAL",5)
+	ActionOverride("ZyELSQM%al%",DestroySelf())
+	IncrementGlobal("ZyELCommInField","GLOBAL",-1)
+	SetGlobal("ZyELCheckCommNum","GLOBAL",1)
+	DestroySelf()
+END
+
+// gets the SQM to start moving properly
+
+IF	!GlobalsLT("ZyELSQ%al%NumLeft","ZyELSL%al%Type")
+	GlobalGT("ZyELSL%al%Type","GLOBAL",1)
+	Global("GotSQMToStart","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("GotSQMToStart","LOCALS",1)
+	SetGlobal("SquadFullSpawn","LOCALS",1)
+	ActionOverride("ZyELSQM%al%",SetGlobal("Start","LOCALS",1))	
+END
+
+// own squad timer starts on 60 seconds starting from first mem death
+
+IF	!GlobalTimerNotExpired("OwnSquadTimer","LOCALS")
+	GlobalsLT("ZyELSQ%al%NumLeft","ZyELSL%al%Type")
+	Global("SquadFullSpawn","LOCALS",1)
+	Global("GotCasualty","LOCALS",0)	
+THEN
+	RESPONSE #100
+	SetGlobalTimer("OwnSquadTimer","LOCALS",40)
+	SetGlobal("GotCasualty","LOCALS",1)	
+	Continue()
+END
+
+// orders troop respawn
+
+IF	GlobalsLT("ZyELSQ%al%NumLeft","ZyELSL%al%Type")
+	!GlobalTimerNotExpired("OwnSquadTimer","LOCALS")
+	Global("GotCasualty","LOCALS",1)	
+THEN
+	RESPONSE #100
+	SetGlobalTimer("OwnSquadTimer","LOCALS",40)
+	ActionOverride("ZyELSQM%al%",SetGlobal("SpawnSquadMember","LOCALS",1))
+	Continue()	
+END
+
+IF	!GlobalsLT("ZyELSQ%al%NumLeft","ZyELSL%al%Type")
+	Global("GotCasualty","LOCALS",1)	
+THEN
+	RESPONSE #100
+	SetGlobal("GotCasualty","LOCALS",0)
+	Continue()
+END~
+        COPY ~override\ZyELSQC%al%.baf~ ~override\ZyELSQC%al%.bcs~            
+	  COMPILE_BAF_TO_BCS
+
+        COPY ~1Sylm\T.txt~ ~override\ZyORSQC%al%.baf~            
+APPEND ~ZyORSQC%al%.baf~
+~// script for Elven Squad Counts
+
+// Destroys self if Commander is dead
+
+IF	Global("ZyORSL%al%Type","GLOBAL",0)
+	Global("SquadFullSpawn","LOCALS",1)
+THEN
+	RESPONSE #100
+	ActionOverride("ZyORSQM%al%",DestroySelf())
+	IncrementGlobal("ZyORCommInField","GLOBAL",-1)
+	SetGlobal("ZyORCheckCommNum","GLOBAL",1)
+	DestroySelf()
+END
+
+IF	Global("ZyORSL%al%Type","GLOBAL",0)
+	Global("SquadFullSpawn","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobalTimer("ZyORReinfSpawnEndTimer","GLOBAL",5)
+	IncrementGlobal("ZyORCommInField","GLOBAL",-1)
+	ActionOverride("ZyORSQM%al%",DestroySelf())
+	SetGlobal("ZyORCheckCommNum","GLOBAL",1)
+	DestroySelf()
+END
+
+// gets the SQM to start moving properly
+
+IF	!GlobalsLT("ZyORSQ%al%NumLeft","ZyORSL%al%Type")
+	GlobalGT("ZyORSL%al%Type","GLOBAL",1)
+	Global("GotSQMToStart","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("GotSQMToStart","LOCALS",1)
+	SetGlobal("SquadFullSpawn","LOCALS",1)
+	ActionOverride("ZyORSQM%al%",SetGlobal("Start","LOCALS",1))	
+END
+
+// own squad timer starts on 60 seconds starting from first mem death
+
+IF	!GlobalTimerNotExpired("OwnSquadTimer","LOCALS")
+	GlobalsLT("ZyORSQ%al%NumLeft","ZyORSL%al%Type")
+	Global("SquadFullSpawn","LOCALS",1)
+	Global("GotCasualty","LOCALS",0)	
+THEN
+	RESPONSE #100
+	SetGlobalTimer("OwnSquadTimer","LOCALS",40)
+	SetGlobal("GotCasualty","LOCALS",1)	
+	Continue()
+END
+
+// orders troop respawn
+
+IF	GlobalsLT("ZyORSQ%al%NumLeft","ZyORSL%al%Type")
+	!GlobalTimerNotExpired("OwnSquadTimer","LOCALS")
+	Global("GotCasualty","LOCALS",1)	
+THEN
+	RESPONSE #100
+	SetGlobalTimer("OwnSquadTimer","LOCALS",40)
+	ActionOverride("ZyORSQM%al%",SetGlobal("SpawnSquadMember","LOCALS",1))
+	Continue()	
+END
+
+IF	!GlobalsLT("ZyORSQ%al%NumLeft","ZyORSL%al%Type")
+	Global("GotCasualty","LOCALS",1)	
+THEN
+	RESPONSE #100
+	SetGlobal("GotCasualty","LOCALS",0)
+	Continue()
+END~
+	COPY ~override\ZyORSQC%al%.baf~ ~override\ZyORSQC%al%.bcs~            
+	COMPILE_BAF_TO_BCS
+
+      END
+    END
+  END
+BUT_ONLY_IF_IT_CHANGES
+
+
+
+
+// Generating Elven/Orcish Fighter CREs 8 10 12
+
+COPY ~1Sylm\T.txt~ ~def.txt~
+  PATCH_IF (SOURCE_SIZE > 0x01) THEN BEGIN
+    SET a_stat = 16
+    SET b_stat = 13
+    SET c_stat = 10
+    SET strbon = 40
+    SET strbonl = 90
+    FOR(i=0;i<3;i=i+1) BEGIN
+      INNER_PATCH %abc% BEGIN
+        READ_ASCII (i*1) "al" ( 1 )
+      END
+      SET lvl = 8 + (i*2)
+      SET tha = 20 - lvl
+      SET save = 19 - lvl     
+      SET hp = lvl * 10 
+      SET xp = lvl * 400
+      SET savel = 17 - lvl
+      SET acl = 8
+      SET hp1 = lvl * 14
+      SET hp2 = lvl * 16
+      SET hp3 = lvl * 18
+      SET hp4 = lvl * 20
+      SET xp1 = lvl * 550
+      SET xp2 = lvl * 700 
+      SET xp3 = lvl * 850 
+      SET xp4 = lvl * 1000
+      
+      SET hp5 = hp2 * 4
+      SET xp5 = xp2 * 2
+      
+      SET hp6 = hp1 * 4
+      SET xp6 = xp1 * 2
+
+      INNER_ACTION BEGIN
+        COPY ~1Sylm\ZyELSMAx.cre~ ~override\ZyELSMA%al%.CRE~
+        SAY NAME1 ~Elven Warrior~
+        SAY NAME2 ~Elven Warrior~
+        WRITE_ASCII 0x258 ~ZyELSMSP~
+        WRITE_BYTE 0x234 %lvl%
+        WRITE_LONG 0x14 %xp%
+        WRITE_SHORT 0x24 %hp%
+        WRITE_SHORT 0x26 %hp%
+        WRITE_BYTE 0x52 %tha%
+        WRITE_BYTE 0x54 %save%
+        WRITE_BYTE 0x55 %save%
+        WRITE_BYTE 0x56 %save%
+        WRITE_BYTE 0x57 %save%
+        WRITE_BYTE 0x58 %save%
+        WRITE_BYTE 0x238 %a_stat%
+        WRITE_BYTE 0x239 %strbon%
+        WRITE_BYTE 0x23a %c_stat%   // int
+        WRITE_BYTE 0x23b %b_stat%   // wis
+        WRITE_BYTE 0x23c %b_stat%   // dex
+        WRITE_BYTE 0x23d %b_stat%   // con
+        WRITE_BYTE 0x23d %c_stat%   // chr
+        COPY ~1Sylm\ZyELSMAx.cre~ ~override\ZyELS1A%al%.CRE~
+        SAY NAME1 ~Elven Sergeant~
+        SAY NAME2 ~Elven Sergeant~
+	ADD_CRE_ITEM ~ZyHelmE5~ #0 #0 #0 ~NONE~ ~HELMET~ 
+	ADD_CRE_ITEM ~ZYINVULN~ #0 #0 #0 ~NONE~ ~RRING~ 
+        WRITE_ASCII 0x248 ~ZyELLEAD~
+        WRITE_ASCII 0x258 ~ZyELSLSP~
+        WRITE_BYTE 0x234 %lvl%
+        WRITE_LONG 0x14 %xp1%
+        WRITE_SHORT 0x24 %hp1%
+        WRITE_SHORT 0x26 %hp1%
+        WRITE_BYTE 0x54 %savel%
+        WRITE_BYTE 0x55 %savel%
+        WRITE_BYTE 0x56 %savel%
+        WRITE_BYTE 0x57 %savel%
+        WRITE_BYTE 0x58 %savel%
+        WRITE_BYTE 0x239 %strbonl%
+         COPY ~override\ZyELS1A%al%.cre~ ~override\ZyELS2A%al%.CRE~
+        SAY NAME1 ~Elven Lieutenant~
+        SAY NAME2 ~Elven Lieutenant~
+        WRITE_LONG 0x14 %xp2%
+        WRITE_SHORT 0x24 %hp2%
+        WRITE_SHORT 0x26 %hp2%
+        COPY ~override\ZyELS1A%al%.cre~ ~override\ZyELS3A%al%.CRE~
+        SAY NAME1 ~Elven Captain~
+        SAY NAME2 ~Elven Captain~
+        WRITE_LONG 0x14 %xp3%
+        WRITE_SHORT 0x24 %hp3%
+        WRITE_SHORT 0x26 %hp3%
+        COPY ~override\ZyELS1A%al%.cre~ ~override\ZyELS4A%al%.CRE~
+        SAY NAME1 ~Elven General~
+        SAY NAME2 ~Elven General~
+        WRITE_LONG 0x14 %xp4%
+        WRITE_SHORT 0x24 %hp4%
+        WRITE_SHORT 0x26 %hp4%
+
+        COPY ~1Sylm\ZyORSMAx.cre~ ~override\ZyORSMA%al%.CRE~
+        SAY NAME1 ~Orcish Warrior~
+        SAY NAME2 ~Orcish Warrior~
+        WRITE_ASCII 0x258 ~ZyORSMSP~
+        WRITE_BYTE 0x234 %lvl%
+        WRITE_LONG 0x14 %xp%
+        WRITE_SHORT 0x24 %hp%
+        WRITE_SHORT 0x26 %hp%
+        WRITE_BYTE 0x52 %tha%
+        WRITE_BYTE 0x54 %save%
+        WRITE_BYTE 0x55 %save%
+        WRITE_BYTE 0x56 %save%
+        WRITE_BYTE 0x57 %save%
+        WRITE_BYTE 0x58 %save%
+        WRITE_BYTE 0x238 %a_stat%
+        WRITE_BYTE 0x239 %strbon%
+        WRITE_BYTE 0x23a %c_stat%   // int
+        WRITE_BYTE 0x23b %b_stat%   // wis
+        WRITE_BYTE 0x23c %b_stat%   // dex
+        WRITE_BYTE 0x23d %b_stat%   // con
+        WRITE_BYTE 0x23d %c_stat%   // chr
+        
+        COPY ~1Sylm\ZyORSMAx.cre~ ~override\ZyORS1A%al%.CRE~
+        SAY NAME1 ~Orc Raider~
+        SAY NAME2 ~Orc Raider~
+	ADD_CRE_ITEM ~ZyHelmO5~ #0 #0 #0 ~NONE~ ~HELMET~ 
+	ADD_CRE_ITEM ~ZYINVULN~ #0 #0 #0 ~NONE~ ~RRING~ 
+        WRITE_ASCII 0x248 ~ZyORLEAD~
+        WRITE_ASCII 0x258 ~ZyORSLSP~
+        WRITE_BYTE 0x234 %lvl%
+        WRITE_LONG 0x14 %xp1%
+        WRITE_SHORT 0x24 %hp1%
+        WRITE_SHORT 0x26 %hp1%
+        WRITE_BYTE 0x54 %savel%
+        WRITE_BYTE 0x55 %savel%
+        WRITE_BYTE 0x56 %savel%
+        WRITE_BYTE 0x57 %savel%
+        WRITE_BYTE 0x58 %savel%
+        WRITE_BYTE 0x239 %strbonl%
+        COPY ~override\ZyORS1A%al%.cre~ ~override\ZyORS2A%al%.CRE~
+        SAY NAME1 ~Orc Chieftain~
+        SAY NAME2 ~Orc Chieftain~
+        WRITE_LONG 0x14 %xp2%
+        WRITE_SHORT 0x24 %hp2%
+        WRITE_SHORT 0x26 %hp2%
+        COPY ~override\ZyORS1A%al%.cre~ ~override\ZyORS3A%al%.CRE~
+        SAY NAME1 ~Orc Champion~
+        SAY NAME2 ~Orc Champion~
+        WRITE_LONG 0x14 %xp3%
+        WRITE_SHORT 0x24 %hp3%
+        WRITE_SHORT 0x26 %hp3%
+        COPY ~override\ZyORS1A%al%.cre~ ~override\ZyORS4A%al%.CRE~
+        SAY NAME1 ~Orc Warlord~
+        SAY NAME2 ~Orc Warlord~
+        WRITE_LONG 0x14 %xp4%
+        WRITE_SHORT 0x24 %hp4%
+        WRITE_SHORT 0x26 %hp4%
+
+        COPY ~override\ZyORS1A%al%.cre~ ~override\Zy18BAL%al%.CRE~
+        SAY NAME1 ~Balrog~
+        SAY NAME2 ~Balrog~
+        WRITE_ASCII 0x248 ~Zy18BALR~
+        WRITE_ASCII 0x258 ~ZyBALROG~
+	ADD_CRE_ITEM ~ZY18BALA~ #0 #0 #0 ~NONE~ ~ARMOR~ 
+	ADD_CRE_ITEM ~ZY18BALW~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
+	ADD_CRE_ITEM ~ZyRingN2~ #0 #0 #0 ~NONE~ ~RRING~ 
+        WRITE_LONG 0x14 %xp5%
+        WRITE_SHORT 0x24 %hp5%
+        WRITE_SHORT 0x26 %hp5%
+        WRITE_SHORT 0x28 4352
+        WRITE_SHORT 0x46 %-6%
+        WRITE_SHORT 0x48 %-6%
+        WRITE_BYTE 0x271 255
+        WRITE_BYTE 0x272 121
+        WRITE_BYTE 0x238 22
+        WRITE_BYTE 0x23a 20   // int
+        WRITE_BYTE 0x23b 20   // wis
+        WRITE_BYTE 0x23c 20   // dex
+        WRITE_BYTE 0x23d 20   // con
+        WRITE_BYTE 0x23d 20   // chr
+        WRITE_BYTE 0x59 100
+        WRITE_BYTE 0x5a 30
+        WRITE_BYTE 0x5b 30
+        WRITE_BYTE 0x5c 30
+        WRITE_BYTE 0x5d 30
+        WRITE_BYTE 0x5e 100
+        WRITE_BYTE 0x5f 30
+
+        COPY ~override\ZyELS1A%al%.cre~ ~override\Zy18ESH%al%.CRE~
+        SAY NAME1 ~Elven King Shade~
+        SAY NAME2 ~Elven King Shade~
+        WRITE_ASCII 0x248 ~Zy18ELSH~
+        WRITE_ASCII 0x258 ~        ~
+	ADD_CRE_ITEM ~ZY18ELSA~ #0 #0 #0 ~NONE~ ~HELMET~ 
+	ADD_CRE_ITEM ~ZY18ELSW~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
+	ADD_CRE_ITEM ~HSPECTRE~ #0 #0 #0 ~NONE~ ~SHIELD~ EQUIP
+	ADD_CRE_ITEM ~ZyREG1P3~ #0 #0 #0 ~NONE~ ~RRING~ 
+	ADD_CRE_ITEM ~RING94~ #0 #0 #0 ~NONE~ ~LRING~ 
+        WRITE_LONG 0x14 %xp6%
+        WRITE_SHORT 0x24 %hp6%
+        WRITE_SHORT 0x26 %hp6%
+        WRITE_BYTE 0x271 4
+        WRITE_BYTE 0x272 133
+        WRITE_BYTE 0x59 100
+        WRITE_BYTE 0x5a 100
+        WRITE_BYTE 0x5b 100
+        WRITE_BYTE 0x5c 100
+        WRITE_BYTE 0x5d 100
+        WRITE_BYTE 0x5e 100
+        WRITE_BYTE 0x5f 100
+        WRITE_BYTE 0x63 40
+
+      END
+    END
+  END
+BUT_ONLY_IF_IT_CHANGES
+ 
+// Generating Elven/Orcish Fighter CREs 14 16 18 20
+
+COPY ~1Sylm\T.txt~ ~def.txt~
+  PATCH_IF (SOURCE_SIZE > 0x01) THEN BEGIN
+    SET a_stat = 18
+    SET b_stat = 15
+    SET c_stat = 12
+    SET strbon = 70
+    SET strbonl = 100
+    FOR(i=0;i<4;i=i+1) BEGIN
+      INNER_PATCH %defg% BEGIN
+        READ_ASCII (i*1) "al" ( 1 )
+      END
+      SET lvl = 14 + (i*2)
+      SET tha = 20 - lvl
+      SET save = 6 - i     
+      SET hp = 134 + 14 * i    // gains 7 hp per level
+      SET xp = hp * 40    // 100 hp = 4000 xp 
+      SET savel = 4 - i
+      SET acl = 8
+      SET hp1 = hp * 14 / 10
+      SET hp2 = hp * 16 / 10
+      SET hp3 = hp * 18 / 10
+      SET hp4 = hp * 20 / 10
+      SET xp1 = xp * 550 / 400
+      SET xp2 = xp * 700 / 400 
+      SET xp3 = xp * 850 / 400 
+      SET xp4 = xp * 1000 / 400
+
+      SET hp5 = hp2 * 4
+      SET xp5 = xp2 * 2
+      
+      SET hp6 = hp1 * 4
+      SET xp6 = xp1 * 2
+
+      INNER_ACTION BEGIN
+        COPY ~1Sylm\ZyELSMAx.cre~ ~override\ZyELSMA%al%.CRE~
+        SAY NAME1 ~Elven Warrior~
+        SAY NAME2 ~Elven Warrior~
+        WRITE_ASCII 0x258 ~ZyELSMSP~
+        WRITE_BYTE 0x234 %lvl%
+        WRITE_LONG 0x14 %xp%
+        WRITE_SHORT 0x24 %hp%
+        WRITE_SHORT 0x26 %hp%
+        WRITE_BYTE 0x52 %tha%
+        WRITE_BYTE 0x54 %save%
+        WRITE_BYTE 0x55 %save%
+        WRITE_BYTE 0x56 %save%
+        WRITE_BYTE 0x57 %save%
+        WRITE_BYTE 0x58 %save%
+        WRITE_BYTE 0x238 %a_stat%
+        WRITE_BYTE 0x239 %strbon%
+        WRITE_BYTE 0x23a %c_stat%   // int
+        WRITE_BYTE 0x23b %b_stat%   // wis
+        WRITE_BYTE 0x23c %b_stat%   // dex
+        WRITE_BYTE 0x23d %b_stat%   // con
+        WRITE_BYTE 0x23d %c_stat%   // chr
+        COPY ~override\ZyELSMA%al%.cre~ ~override\ZyELS1A%al%.CRE~
+        SAY NAME1 ~Elven Sergeant~
+        SAY NAME2 ~Elven Sergeant~
+	ADD_CRE_ITEM ~ZyHelmE5~ #0 #0 #0 ~NONE~ ~HELMET~ 
+	ADD_CRE_ITEM ~ZYINVULN~ #0 #0 #0 ~NONE~ ~RRING~ 
+        WRITE_ASCII 0x248 ~ZyELLEAD~
+        WRITE_ASCII 0x258 ~ZyELSLSP~
+        WRITE_BYTE 0x234 %lvl%
+        WRITE_LONG 0x14 %xp1%
+        WRITE_SHORT 0x24 %hp1%
+        WRITE_SHORT 0x26 %hp1%
+        WRITE_BYTE 0x54 %savel%
+        WRITE_BYTE 0x55 %savel%
+        WRITE_BYTE 0x56 %savel%
+        WRITE_BYTE 0x57 %savel%
+        WRITE_BYTE 0x58 %savel%
+        WRITE_BYTE 0x239 %strbonl%
+         COPY ~override\ZyELS1A%al%.cre~ ~override\ZyELS2A%al%.CRE~
+        SAY NAME1 ~Elven Lieutenant~
+        SAY NAME2 ~Elven Lieutenant~
+        WRITE_LONG 0x14 %xp2%
+        WRITE_SHORT 0x24 %hp2%
+        WRITE_SHORT 0x26 %hp2%
+        COPY ~override\ZyELS1A%al%.cre~ ~override\ZyELS3A%al%.CRE~
+        SAY NAME1 ~Elven Captain~
+        SAY NAME2 ~Elven Captain~
+        WRITE_LONG 0x14 %xp3%
+        WRITE_SHORT 0x24 %hp3%
+        WRITE_SHORT 0x26 %hp3%
+        COPY ~override\ZyELS1A%al%.cre~ ~override\ZyELS4A%al%.CRE~
+        SAY NAME1 ~Elven General~
+        SAY NAME2 ~Elven General~
+        WRITE_LONG 0x14 %xp4%
+        WRITE_SHORT 0x24 %hp4%
+        WRITE_SHORT 0x26 %hp4%
+
+        COPY ~1Sylm\ZyORSMAx.cre~ ~override\ZyORSMA%al%.CRE~
+        SAY NAME1 ~Orcish Warrior~
+        SAY NAME2 ~Orcish Warrior~
+        WRITE_ASCII 0x258 ~ZyORSMSP~
+        WRITE_BYTE 0x234 %lvl%
+        WRITE_LONG 0x14 %xp%
+        WRITE_SHORT 0x24 %hp%
+        WRITE_SHORT 0x26 %hp%
+        WRITE_BYTE 0x52 %tha%
+        WRITE_BYTE 0x54 %save%
+        WRITE_BYTE 0x55 %save%
+        WRITE_BYTE 0x56 %save%
+        WRITE_BYTE 0x57 %save%
+        WRITE_BYTE 0x58 %save%
+        WRITE_BYTE 0x238 %a_stat%
+        WRITE_BYTE 0x239 %strbon%
+        WRITE_BYTE 0x23a %c_stat%   // int
+        WRITE_BYTE 0x23b %b_stat%   // wis
+        WRITE_BYTE 0x23c %b_stat%   // dex
+        WRITE_BYTE 0x23d %b_stat%   // con
+        WRITE_BYTE 0x23d %c_stat%   // chr
+        
+        COPY ~override\ZyORSMA%al%.cre~ ~override\ZyORS1A%al%.CRE~
+        SAY NAME1 ~Orc Raider~
+        SAY NAME2 ~Orc Raider~
+	ADD_CRE_ITEM ~ZyHelmO5~ #0 #0 #0 ~NONE~ ~HELMET~ 
+	ADD_CRE_ITEM ~ZYINVULN~ #0 #0 #0 ~NONE~ ~RRING~ 
+        WRITE_ASCII 0x248 ~ZyORLEAD~
+        WRITE_ASCII 0x258 ~ZyORSLSP~
+        WRITE_BYTE 0x234 %lvl%
+        WRITE_LONG 0x14 %xp1%
+        WRITE_SHORT 0x24 %hp1%
+        WRITE_SHORT 0x26 %hp1%
+        WRITE_BYTE 0x54 %savel%
+        WRITE_BYTE 0x55 %savel%
+        WRITE_BYTE 0x56 %savel%
+        WRITE_BYTE 0x57 %savel%
+        WRITE_BYTE 0x58 %savel%
+        WRITE_BYTE 0x239 %strbonl%
+        COPY ~override\ZyORS1A%al%.cre~ ~override\ZyORS2A%al%.CRE~
+        SAY NAME1 ~Orc Chieftain~
+        SAY NAME2 ~Orc Chieftain~
+        WRITE_LONG 0x14 %xp2%
+        WRITE_SHORT 0x24 %hp2%
+        WRITE_SHORT 0x26 %hp2%
+        COPY ~override\ZyORS1A%al%.cre~ ~override\ZyORS3A%al%.CRE~
+        SAY NAME1 ~Orc Champion~
+        SAY NAME2 ~Orc Champion~
+        WRITE_LONG 0x14 %xp3%
+        WRITE_SHORT 0x24 %hp3%
+        WRITE_SHORT 0x26 %hp3%
+        COPY ~override\ZyORS1A%al%.cre~ ~override\ZyORS4A%al%.CRE~
+        SAY NAME1 ~Orc Warlord~
+        SAY NAME2 ~Orc Warlord~
+        WRITE_LONG 0x14 %xp4%
+        WRITE_SHORT 0x24 %hp4%
+        WRITE_SHORT 0x26 %hp4%
+
+        COPY ~override\ZyORS1A%al%.cre~ ~override\Zy18BAL%al%.CRE~
+        SAY NAME1 ~Balrog~
+        SAY NAME2 ~Balrog~
+        WRITE_ASCII 0x248 ~Zy18BALR~
+        WRITE_ASCII 0x258 ~ZyBALROG~
+	ADD_CRE_ITEM ~ZY18BALA~ #0 #0 #0 ~NONE~ ~ARMOR~ 
+	ADD_CRE_ITEM ~ZY18BALW~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
+	ADD_CRE_ITEM ~ZyRingN2~ #0 #0 #0 ~NONE~ ~RRING~
+        WRITE_LONG 0x14 %xp5%
+        WRITE_SHORT 0x24 %hp5%
+        WRITE_SHORT 0x26 %hp5%
+        WRITE_SHORT 0x28 4352
+        WRITE_SHORT 0x46 %-6%
+        WRITE_SHORT 0x48 %-6%
+        WRITE_BYTE 0x271 255
+        WRITE_BYTE 0x272 121
+        WRITE_BYTE 0x238 22
+        WRITE_BYTE 0x23a 20   // int
+        WRITE_BYTE 0x23b 20   // wis
+        WRITE_BYTE 0x23c 20   // dex
+        WRITE_BYTE 0x23d 20   // con
+        WRITE_BYTE 0x23d 20   // chr
+        WRITE_BYTE 0x59 100
+        WRITE_BYTE 0x5a 30
+        WRITE_BYTE 0x5b 30
+        WRITE_BYTE 0x5c 30
+        WRITE_BYTE 0x5d 30
+        WRITE_BYTE 0x5e 100
+        WRITE_BYTE 0x5f 30
+
+        COPY ~override\ZyELS1A%al%.cre~ ~override\Zy18ESH%al%.CRE~
+        SAY NAME1 ~Elven King Shade~
+        SAY NAME2 ~Elven King Shade~
+        WRITE_ASCII 0x248 ~Zy18ELSH~
+        WRITE_ASCII 0x258 ~        ~
+	ADD_CRE_ITEM ~ZY18ELSA~ #0 #0 #0 ~NONE~ ~HELMET~ 
+	ADD_CRE_ITEM ~ZY18ELSW~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
+	ADD_CRE_ITEM ~HSPECTRE~ #0 #0 #0 ~NONE~ ~SHIELD~ EQUIP
+	ADD_CRE_ITEM ~ZyREG1P3~ #0 #0 #0 ~NONE~ ~RRING~ 
+	ADD_CRE_ITEM ~RING94~ #0 #0 #0 ~NONE~ ~LRING~ 
+        WRITE_LONG 0x14 %xp6%
+        WRITE_SHORT 0x24 %hp6%
+        WRITE_SHORT 0x26 %hp6%
+        WRITE_BYTE 0x271 4
+        WRITE_BYTE 0x272 133
+        WRITE_BYTE 0x59 100
+        WRITE_BYTE 0x5a 100
+        WRITE_BYTE 0x5b 100
+        WRITE_BYTE 0x5c 100
+        WRITE_BYTE 0x5d 100
+        WRITE_BYTE 0x5e 100
+        WRITE_BYTE 0x5f 100
+        WRITE_BYTE 0x63 40
+
+      END
+    END
+  END
+BUT_ONLY_IF_IT_CHANGES
+
+// Generating Elven/Orcish Fighter CREs 23 26 29 32 35 38 
+
+COPY ~1Sylm\T.txt~ ~def.txt~
+  PATCH_IF (SOURCE_SIZE > 0x01) THEN BEGIN
+    SET a_stat = 20
+    SET b_stat = 17
+    SET c_stat = 14
+    SET strbon = 100
+    SET strbonl = 100
+    FOR(i=0;i<6;i=i+1) BEGIN
+      INNER_PATCH %hijklm% BEGIN
+        READ_ASCII (i*1) "al" ( 1 )
+      END
+      SET lvl = 23 + (i*3)
+      SET tha = 20 - lvl
+      SET save = 0     
+      SET hp = 188 + 12 * i    // gains 7 hp per level
+      SET xp = hp * 40    // 100 hp = 4000 xp 
+      SET savel = 0
+      SET acl = 8
+      SET hp1 = hp * 14 / 10
+      SET hp2 = hp * 16 / 10
+      SET hp3 = hp * 18 / 10
+      SET hp4 = hp * 20 / 10
+      SET xp1 = xp * 550 / 400
+      SET xp2 = xp * 700 / 400 
+      SET xp3 = xp * 850 / 400 
+      SET xp4 = xp * 1000 / 400
+
+      SET hp5 = hp2 * 4
+      SET xp5 = xp2 * 2
+      
+      SET hp6 = hp1 * 4
+      SET xp6 = xp1 * 2
+
+      INNER_ACTION BEGIN
+        COPY ~1Sylm\ZyELSMAx.cre~ ~override\ZyELSMA%al%.CRE~
+        SAY NAME1 ~Elven Warrior~
+        SAY NAME2 ~Elven Warrior~
+        WRITE_ASCII 0x258 ~ZyELSMSP~
+        WRITE_BYTE 0x234 %lvl%
+        WRITE_LONG 0x14 %xp%
+        WRITE_SHORT 0x24 %hp%
+        WRITE_SHORT 0x26 %hp%
+        WRITE_BYTE 0x52 %tha%
+//        WRITE_BYTE 0x53 2
+        WRITE_BYTE 0x54 %save%
+        WRITE_BYTE 0x55 %save%
+        WRITE_BYTE 0x56 %save%
+        WRITE_BYTE 0x57 %save%
+        WRITE_BYTE 0x58 %save%
+        WRITE_BYTE 0x238 %a_stat%
+        WRITE_BYTE 0x239 %strbon%
+        WRITE_BYTE 0x23a %c_stat%   // int
+        WRITE_BYTE 0x23b %b_stat%   // wis
+        WRITE_BYTE 0x23c %b_stat%   // dex
+        WRITE_BYTE 0x23d %b_stat%   // con
+        WRITE_BYTE 0x23d %c_stat%   // chr
+        COPY ~override\ZyELSMA%al%.cre~ ~override\ZyELS1A%al%.CRE~
+        SAY NAME1 ~Elven Sergeant~
+        SAY NAME2 ~Elven Sergeant~
+	ADD_CRE_ITEM ~ZyHelmE5~ #0 #0 #0 ~NONE~ ~HELMET~ 
+	ADD_CRE_ITEM ~ZYINVULN~ #0 #0 #0 ~NONE~ ~RRING~ 
+        WRITE_ASCII 0x248 ~ZyELLEAD~
+        WRITE_ASCII 0x258 ~ZyELSLSP~
+        WRITE_BYTE 0x234 %lvl%
+        WRITE_LONG 0x14 %xp1%
+        WRITE_SHORT 0x24 %hp1%
+        WRITE_SHORT 0x26 %hp1%
+        WRITE_BYTE 0x54 %savel%
+        WRITE_BYTE 0x55 %savel%
+        WRITE_BYTE 0x56 %savel%
+        WRITE_BYTE 0x57 %savel%
+        WRITE_BYTE 0x58 %savel%
+        WRITE_BYTE 0x239 %strbonl%
+         COPY ~override\ZyELS1A%al%.cre~ ~override\ZyELS2A%al%.CRE~
+        SAY NAME1 ~Elven Lieutenant~
+        SAY NAME2 ~Elven Lieutenant~
+        WRITE_LONG 0x14 %xp2%
+        WRITE_SHORT 0x24 %hp2%
+        WRITE_SHORT 0x26 %hp2%
+        COPY ~override\ZyELS1A%al%.cre~ ~override\ZyELS3A%al%.CRE~
+        SAY NAME1 ~Elven Captain~
+        SAY NAME2 ~Elven Captain~
+        WRITE_LONG 0x14 %xp3%
+        WRITE_SHORT 0x24 %hp3%
+        WRITE_SHORT 0x26 %hp3%
+        COPY ~override\ZyELS1A%al%.cre~ ~override\ZyELS4A%al%.CRE~
+        SAY NAME1 ~Elven General~
+        SAY NAME2 ~Elven General~
+        WRITE_LONG 0x14 %xp4%
+        WRITE_SHORT 0x24 %hp4%
+        WRITE_SHORT 0x26 %hp4%
+
+        COPY ~1Sylm\ZyORSMAx.cre~ ~override\ZyORSMA%al%.CRE~
+        SAY NAME1 ~Orcish Warrior~
+        SAY NAME2 ~Orcish Warrior~
+        WRITE_ASCII 0x258 ~ZyORSMSP~
+        WRITE_BYTE 0x234 %lvl%
+        WRITE_LONG 0x14 %xp%
+        WRITE_SHORT 0x24 %hp%
+        WRITE_SHORT 0x26 %hp%
+        WRITE_BYTE 0x52 %tha%
+//        WRITE_BYTE 0x53 2
+        WRITE_BYTE 0x54 %save%
+        WRITE_BYTE 0x55 %save%
+        WRITE_BYTE 0x56 %save%
+        WRITE_BYTE 0x57 %save%
+        WRITE_BYTE 0x58 %save%
+        WRITE_BYTE 0x238 %a_stat%
+        WRITE_BYTE 0x239 %strbon%
+        WRITE_BYTE 0x23a %c_stat%   // int
+        WRITE_BYTE 0x23b %b_stat%   // wis
+        WRITE_BYTE 0x23c %b_stat%   // dex
+        WRITE_BYTE 0x23d %b_stat%   // con
+        WRITE_BYTE 0x23d %c_stat%   // chr
+        
+        COPY ~override\ZyORSMA%al%.cre~ ~override\ZyORS1A%al%.CRE~
+        SAY NAME1 ~Orc Raider~
+        SAY NAME2 ~Orc Raider~
+	ADD_CRE_ITEM ~ZyHelmO5~ #0 #0 #0 ~NONE~ ~HELMET~ 
+	ADD_CRE_ITEM ~ZYINVULN~ #0 #0 #0 ~NONE~ ~RRING~ 
+        WRITE_ASCII 0x248 ~ZyORLEAD~
+        WRITE_ASCII 0x258 ~ZyORSLSP~
+        WRITE_BYTE 0x234 %lvl%
+        WRITE_LONG 0x14 %xp1%
+        WRITE_SHORT 0x24 %hp1%
+        WRITE_SHORT 0x26 %hp1%
+        WRITE_BYTE 0x54 %savel%
+        WRITE_BYTE 0x55 %savel%
+        WRITE_BYTE 0x56 %savel%
+        WRITE_BYTE 0x57 %savel%
+        WRITE_BYTE 0x58 %savel%
+        WRITE_BYTE 0x239 %strbonl%
+        COPY ~override\ZyORS1A%al%.cre~ ~override\ZyORS2A%al%.CRE~
+        SAY NAME1 ~Orc Chieftain~
+        SAY NAME2 ~Orc Chieftain~
+        WRITE_LONG 0x14 %xp2%
+        WRITE_SHORT 0x24 %hp2%
+        WRITE_SHORT 0x26 %hp2%
+        COPY ~override\ZyORS1A%al%.cre~ ~override\ZyORS3A%al%.CRE~
+        SAY NAME1 ~Orc Champion~
+        SAY NAME2 ~Orc Champion~
+        WRITE_LONG 0x14 %xp3%
+        WRITE_SHORT 0x24 %hp3%
+        WRITE_SHORT 0x26 %hp3%
+        COPY ~override\ZyORS1A%al%.cre~ ~override\ZyORS4A%al%.CRE~
+        SAY NAME1 ~Orc Warlord~
+        SAY NAME2 ~Orc Warlord~
+        WRITE_LONG 0x14 %xp4%
+        WRITE_SHORT 0x24 %hp4%
+        WRITE_SHORT 0x26 %hp4%
+
+        COPY ~override\ZyORS1A%al%.cre~ ~override\Zy18BAL%al%.CRE~
+        SAY NAME1 ~Balrog~
+        SAY NAME2 ~Balrog~
+        WRITE_ASCII 0x248 ~Zy18BALR~
+        WRITE_ASCII 0x258 ~ZyBALROG~
+	ADD_CRE_ITEM ~ZY18BALA~ #0 #0 #0 ~NONE~ ~ARMOR~ 
+	ADD_CRE_ITEM ~ZY18BALW~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
+	ADD_CRE_ITEM ~ZyRingN2~ #0 #0 #0 ~NONE~ ~RRING~ 
+        WRITE_LONG 0x14 %xp5%
+        WRITE_SHORT 0x24 %hp5%
+        WRITE_SHORT 0x26 %hp5%
+        WRITE_SHORT 0x28 4352
+        WRITE_SHORT 0x46 %-6%
+        WRITE_SHORT 0x48 %-6%
+        WRITE_BYTE 0x271 255
+        WRITE_BYTE 0x272 121
+        WRITE_BYTE 0x238 22
+        WRITE_BYTE 0x23a 20   // int
+        WRITE_BYTE 0x23b 20   // wis
+        WRITE_BYTE 0x23c 20   // dex
+        WRITE_BYTE 0x23d 20   // con
+        WRITE_BYTE 0x23d 20   // chr
+        WRITE_BYTE 0x59 100
+        WRITE_BYTE 0x5a 30
+        WRITE_BYTE 0x5b 30
+        WRITE_BYTE 0x5c 30
+        WRITE_BYTE 0x5d 30
+        WRITE_BYTE 0x5e 100
+        WRITE_BYTE 0x5f 30
+
+        COPY ~override\ZyELS1A%al%.cre~ ~override\Zy18ESH%al%.CRE~
+        SAY NAME1 ~Elven King Shade~
+        SAY NAME2 ~Elven King Shade~
+        WRITE_ASCII 0x248 ~Zy18ELSH~
+        WRITE_ASCII 0x258 ~        ~
+	ADD_CRE_ITEM ~ZY18ELSA~ #0 #0 #0 ~NONE~ ~HELMET~ 
+	ADD_CRE_ITEM ~ZY18ELSW~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
+	ADD_CRE_ITEM ~HSPECTRE~ #0 #0 #0 ~NONE~ ~SHIELD~ EQUIP
+	ADD_CRE_ITEM ~ZyREG1P3~ #0 #0 #0 ~NONE~ ~RRING~ 
+	ADD_CRE_ITEM ~RING94~ #0 #0 #0 ~NONE~ ~LRING~ 
+        WRITE_LONG 0x14 %xp6%
+        WRITE_SHORT 0x24 %hp6%
+        WRITE_SHORT 0x26 %hp6%
+        WRITE_BYTE 0x271 4
+        WRITE_BYTE 0x272 133
+        WRITE_BYTE 0x59 100
+        WRITE_BYTE 0x5a 100
+        WRITE_BYTE 0x5b 100
+        WRITE_BYTE 0x5c 100
+        WRITE_BYTE 0x5d 100
+        WRITE_BYTE 0x5e 100
+        WRITE_BYTE 0x5f 100
+        WRITE_BYTE 0x63 40
+
+      END
+    END
+  END
+BUT_ONLY_IF_IT_CHANGES
+
+// AT_INTERACTIVE_EXIT ~zy1sylm.bat~

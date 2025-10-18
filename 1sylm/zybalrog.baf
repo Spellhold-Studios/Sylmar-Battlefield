@@ -1,0 +1,78 @@
+// shield and true seeing
+
+IF	Global("FireShieldUp","LOCALS",0)
+//	Detect(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	SetGlobal("FireShieldUp","LOCALS",1)
+	ApplySpellRES("ZyBRSHLD",Myself)
+	ApplySpellRES("ZyTRUSEE",Myself)
+	ApplySpell(Myself,BALOR_FIRE_SHIELD)
+	DestroyItem("ZyTAXEN1")
+END
+
+// do battle
+
+IF	See(ThirdNearestEnemyOf(Myself))
+	!Range(LastSeenBy(Myself),10)
+	!GlobalTimerNotExpired("ZyFWhipT","LOCALS")
+THEN
+	RESPONSE #40
+	SetGlobalTimer("ZyFWhipT","LOCALS",90)
+	SpellNoDecRES("ZYBRWHIP",LastSeenBy(Myself) )
+	Continue()
+	RESPONSE #60
+	SetGlobalTimer("ZyFWhipT","LOCALS",18)
+	Continue()
+END
+
+IF	See(SecondNearestEnemyOf(Myself))
+	!GlobalTimerNotExpired("ZyFireballT","LOCALS")
+THEN
+	RESPONSE #10
+	SetGlobalTimer("ZyFireballT","LOCALS",60)
+	SpellNoDec(LastSeenBy(Myself),WIZARD_FIREBALL)
+	Continue()
+	RESPONSE #50
+	SetGlobalTimer("ZyFireballT","LOCALS",12)
+	Continue()
+END
+
+IF	Range(ThirdNearestEnemyOf(Myself),5)
+	!GlobalTimerNotExpired("ZyFearT","LOCALS")
+THEN
+	RESPONSE #25
+	SetGlobalTimer("ZyFearT","LOCALS",120)
+	SpellNoDec(NearestEnemyOf(Myself),DEMON_FEAR)
+	Continue()
+	RESPONSE #75
+	SetGlobalTimer("ZyFearT","LOCALS",24)
+	Continue()
+END
+
+IF	LevelGT(Myself,15)
+	Range(ThirdNearestEnemyOf(Myself),8)
+	!GlobalTimerNotExpired("ZySunfireT","LOCALS")
+THEN
+	RESPONSE #25
+	SetGlobalTimer("ZySunfireT","LOCALS",90)
+	SpellNoDec(Myself,WIZARD_SUN_FIRE)
+	Continue()
+	RESPONSE #75
+	SetGlobalTimer("ZySunfireT","LOCALS",18)
+	Continue()
+END
+
+IF	LevelGT(Myself,13)
+	See(NearestEnemyOf(Myself))
+	!StateCheck(LastSeenBy,STATE_HELPLESS)
+	GlobalTimerNotExpired("ZyParalyzeT","LOCALS")
+THEN
+	RESPONSE #40
+	SetGlobalTimer("ZyParalyzeT","LOCALS",90)
+	SpellNoDec(LastSeenBy,TANARI_PARALYZE)
+	Continue()
+	RESPONSE #60
+	SetGlobalTimer("ZyParalyzeT","LOCALS",9)
+	Continue()
+END

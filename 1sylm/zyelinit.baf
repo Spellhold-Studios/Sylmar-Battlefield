@@ -1,0 +1,60 @@
+// initialisation for squad members
+
+IF	Global("SetGender","LOCALS",0)
+THEN
+	RESPONSE #0
+	RESPONSE #25
+	Polymorph(FIGHTER_FEMALE_ELF)
+	SetGlobal("SetGender","LOCALS",1)
+	RESPONSE #75
+	SetGlobal("SetGender","LOCALS",1)
+END	
+
+IF	Global("SetWeapon","LOCALS",0)
+	Global("SetGotRange","LOCALS",0)
+THEN
+	RESPONSE #0
+	RESPONSE #70
+	SetGlobal("SetGotRange","LOCALS",1)
+	DestroyItem("ZyTDAGN1")
+	RESPONSE #15
+	SetGlobal("SetGotRange","LOCALS",2)
+	SetGlobal("SetWeapon","LOCALS",1)	
+	DestroyItem("ZYOROFN1")
+	TakeItemReplace("ZYEBOWN1","ZYTDAGN1",Myself)
+	TakeItemReplace("ZYSW2HN1","ZYSW1HN3",Myself)
+	ChangeAIScript("ZYEFRN0",DEFAULT)
+	RESPONSE #15
+	SetGlobal("SetGotRange","LOCALS",2)
+	SetGlobal("SetWeapon","LOCALS",1)	
+	DestroyItem("ZYOROFN1")
+	TakeItemReplace("ZYEBOWN1","ZYTDAGN1",Myself)
+	TakeItemReplace("ZYSPERN1","ZYSW1HN3",Myself)
+	ChangeAIScript("ZYEFRN0",DEFAULT)
+END
+
+IF	Global("ClearThisScript","LOCALS",0)
+	Global("SetHouse","LOCALS",1)
+	Global("SetGender","LOCALS",1)
+	Global("SetWeapon","LOCALS",1)
+	Global("SetGotRange","LOCALS",1)
+THEN
+	RESPONSE #100
+	EquipMostDamagingMelee()
+	ApplySpellRES("ZYSCHEAL",Myself)
+	SetGlobal("ClearThisScript","LOCALS",1)
+	ChangeAIScript("",RACE)		
+END
+
+IF	Global("ClearThisScript","LOCALS",0)
+	Global("SetHouse","LOCALS",1)
+	Global("SetGender","LOCALS",1)
+	Global("SetWeapon","LOCALS",1)
+	Global("SetGotRange","LOCALS",2)
+THEN
+	RESPONSE #100
+	EquipRanged()
+	ApplySpellRES("ZYSCHEAL",Myself)
+	SetGlobal("ClearThisScript","LOCALS",1)
+	ChangeAIScript("",RACE)		
+END

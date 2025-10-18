@@ -1,0 +1,251 @@
+// WARDEN
+
+// death
+
+IF	Die()
+THEN
+	RESPONSE #100
+	SetGlobal("WardenSlain","Zy1800",1)
+	SetGlobal("ZyELSLaType","GLOBAL",-1)
+	Continue()
+END
+
+// assigns dialog
+
+IF	Global("SetBalrogDialog","Zy1800",5)
+THEN	
+	RESPONSE #100
+	StartDialogNoSet([PC])
+END
+
+IF	GlobalGT("EKSSlain","Zy1800",0)
+	Global("SaidEKSSlain","LOCALS",0)
+THEN	
+	RESPONSE #100
+	ClearActions(Myself)
+	StartDialogNoSet([PC])
+END
+
+IF	Global("AssignDialogue","LOCALS",0)
+	HasItem("ZYPLATN8",Myself)
+THEN
+	RESPONSE #100	
+    	FadeFromColor([20.0],0)
+    	SetGlobal("AssignDialogue","LOCALS",1)
+	TakeItemReplace("ZY18WRDN","ZYCLCKN1",Myself)
+	SetDialogue("ZY18WRDN")
+	MoveViewObject(Player1,INSTANT)
+	SetCutSceneLite(FALSE)
+	StartDialogNoSet([PC])
+END
+
+IF	Global("ZyElvesWin","Zy1800",1)
+	Global("EKSHere","Zy1800",1)	
+	Global("EKSLeft","Zy1800",1)
+	Global("TalkVictory","LOCALS",0)
+THEN
+	RESPONSE #100
+	StartDialogNoSet([PC])
+END
+
+IF	Global("ZyElvesWin","Zy1800",1)
+	Global("EKSHere","Zy1800",0)
+	Global("TalkVictory","LOCALS",0)
+THEN
+	RESPONSE #100
+	StartDialogNoSet([PC])
+END
+
+// weapon configuration - switch to ranged
+
+IF	Global("SetGotRange","LOCALS",1)
+	HasItem("ZySW1HN3",Myself)
+THEN
+	RESPONSE #100
+	SetGlobal("SetGotRange","LOCALS",2)
+	TakeItemReplace("ZYTDAGN1","ZYSW1HN3",Myself)
+	DestroyItem("ZYSW1HN4")
+	ChangeAIScript("ZYEFSL0",DEFAULT)
+	EquipRanged()
+END
+
+IF	Global("SetGotRange","LOCALS",1)
+	HasItem("ZySW1HN2",Myself)
+THEN
+	RESPONSE #100
+	SetGlobal("SetGotRange","LOCALS",2)
+	TakeItemReplace("ZYTDAGN1","ZYSW1HN2",Myself)
+	DestroyItem("ZYSW1HN4")
+	ChangeAIScript("ZYEFSL0",DEFAULT)
+	EquipRanged()
+END
+
+IF	Global("SetGotRange","LOCALS",1)
+	HasItem("ZySW1HN1",Myself)
+THEN
+	RESPONSE #100
+	SetGlobal("SetGotRange","LOCALS",2)
+	TakeItemReplace("ZYTDAGN1","ZYSW1HN1",Myself)
+	DestroyItem("ZYSW1HN5")
+	ChangeAIScript("ZYEFSL0",DEFAULT)
+	EquipRanged()
+END
+
+// self buffs
+
+IF	Detect(NearestEnemyOf(Myself))
+	CheckStat(Myself,0,STONESKINS)	
+	!GlobalTimerNotExpired("ZyStoneSkinT","LOCALS")
+THEN
+	RESPONSE #100
+	SetGlobalTimer("ZyStoneSkinT","LOCALS",150)
+	ReallyForceSpell(Myself,WIZARD_STONE_SKIN)
+	Continue()
+END
+
+IF	See(NearestEnemyOf(Myself))
+	!StateCheck(Myself,STATE_MIRRORIMAGE)
+	!GlobalTimerNotExpired("ZyMirrorT","LOCALS")
+THEN
+	RESPONSE #40
+	SetGlobalTimer("ZyMirrorT","LOCALS",75)
+	ReallyForceSpell(Myself,WIZARD_MIRROR_IMAGE)
+	Continue()
+	RESPONSE #60
+	SetGlobalTimer("ZyMirrorT","LOCALS",15)
+	Continue()
+END
+
+IF	See(NearestEnemyOf(Myself))
+	CheckStat(Myself,0,STONESKINS)	
+	GlobalTimerNotExpired("ZyStoneSkinT","LOCALS")
+	CheckStat(Myself,0,WIZARD_PROTECTION_FROM_NORMAL_WEAPONS)
+	!GlobalTimerNotExpired("ZyProtWeaponsT","LOCALS")
+	HPPercentLT(Myself,70)
+THEN
+	RESPONSE #50
+	SetGlobalTimer("ZyProtWeaponsT","LOCALS",150)
+	ReallyForceSpell(Myself,WIZARD_PROTECTION_FROM_NORMAL_WEAPONS)
+	Continue()
+	RESPONSE #50
+	SetGlobalTimer("ZyProtWeaponsT","LOCALS",15)
+	Continue()
+END
+
+// cleric base
+
+IF	!Range(NearestEnemyOf(Myself),7)
+	!GlobalTimerNotExpired("ZyMassRegenT","LOCALS")
+	OR(2)
+	HPPercentLT([GOODBUTBLUE],40)
+	HPPercentLT(Myself,80)
+THEN
+	RESPONSE #50
+	SetGlobalTimer("ZyMassRegenT","LOCALS",150)
+	SpellNoDecRES("ZYEMREGN",Myself)
+	Continue()
+	RESPONSE #50
+	SetGlobalTimer("ZyMassRegenT","LOCALS",30)
+	Continue()
+END
+
+IF	See(NearestEnemyOf(Myself))
+	!StateCheck(Myself,STATE_CHANT)
+	!GlobalTimerNotExpired("ZyPrayerT","LOCALS")
+THEN
+	RESPONSE #40
+	SetGlobalTimer("ZyPrayerT","LOCALS",100)
+	ReallyForceSpell(Myself,CLERIC_CHANT)
+	Continue()
+	RESPONSE #60
+	SetGlobalTimer("ZyPrayerT","LOCALS",20)
+	Continue()	
+END
+
+IF	See(NearestEnemyOf(Myself))
+	!StateCheck(Myself,STATE_BLESS)
+	!GlobalTimerNotExpired("ZyBlessT","LOCALS")
+THEN
+	RESPONSE #100
+	SetGlobalTimer("ZyBlessT","LOCALS",50)
+	ReallyForceSpell(Myself,CLERIC_BLESS)
+	Continue()
+END
+
+// attack
+
+IF	See(SecondNearestEnemyOf(Myself))
+	!GlobalTimerNotExpired("ZyHolySmiteT","LOCALS")
+THEN
+	RESPONSE #10
+	SetGlobalTimer("ZyHolySmiteT","LOCALS",60)
+	SpellNoDec(LastSeenBy(Myself),CLERIC_HOLY_SMITE)
+	Continue()
+	RESPONSE #50
+	SetGlobalTimer("ZyHolySmiteT","LOCALS",12)
+	Continue()
+END
+
+IF	See(NearestEnemyOf(Myself))
+	CheckStat(LastSeenBy(Myself),0,CasterHold)	
+	!GlobalTimerNotExpired("ZyHoldPersonT","LOCALS")
+THEN
+	RESPONSE #10
+	SetGlobalTimer("ZyHoldPersonT","LOCALS",95)
+	SpellNoDec(LastSeenBy(Myself),WIZARD_HOLD_PERSON)
+	Continue()
+	RESPONSE #60
+	SetGlobalTimer("ZyHoldPersonT","LOCALS",19)
+	Continue()
+END
+
+IF	See(ThirdNearestEnemyOf(Myself))
+	!GlobalTimerNotExpired("ZyChainLightningT","LOCALS")
+THEN
+	RESPONSE #10
+	SetGlobalTimer("ZyChainLightningT","LOCALS",130)
+	SpellNoDec(LastSeenBy(Myself),WIZARD_CHAIN_LIGHTNING)
+	Continue()
+	RESPONSE #70
+	SetGlobalTimer("ZyChainLightningT","LOCALS",26)
+	Continue()
+END
+
+// special warden armor for ease of viewing
+
+IF	!HasItem("ZyPLATN8",Myself)
+	HasItem("ZyPLATN0",Myself)
+THEN
+	RESPONSE #100
+	TakeItemReplace("ZYPLATN8","ZYPLATN0",Myself)
+END
+
+IF	!HasItem("ZyPLATN8",Myself)
+	HasItem("ZyPLATN1",Myself)
+THEN
+	RESPONSE #100
+	TakeItemReplace("ZYPLATN8","ZYPLATN1",Myself)
+END
+
+IF	!HasItem("ZyPLATN8",Myself)
+	HasItem("ZyPLATN2",Myself)
+THEN
+	RESPONSE #100
+	TakeItemReplace("ZYPLATN8","ZYPLATN2",Myself)
+END
+
+IF	!HasItem("ZyPLATN8",Myself)
+	HasItem("ZyPLATN3",Myself)
+THEN
+	RESPONSE #100
+	TakeItemReplace("ZYPLATN8","ZYPLATN3",Myself)
+END
+
+IF	!HasItem("ZyPLATN8",Myself)
+	HasItem("ZyPLATN0",Myself)
+THEN
+	RESPONSE #100
+	TakeItemReplace("ZYPLATN8","ZYPLATN0",Myself)
+END
+
+

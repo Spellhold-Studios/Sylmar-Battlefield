@@ -1,0 +1,13 @@
+// DEFAULT ELF assigns the appropriate navigation file to the CRE
+
+IF	AreaCheck("Zy1800")
+THEN
+	RESPONSE #100
+	ChangeAIScript("ZyEL1800",DEFAULT)
+END
+
+IF	AreaCheck("Zy1304")
+THEN
+	RESPONSE #100
+	ChangeAIScript("ZyEL1304",DEFAULT)
+END

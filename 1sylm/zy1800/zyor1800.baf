@@ -1,0 +1,20 @@
+// ORCISH script for navigating Map 1800
+
+// jams here
+
+IF	Global("Start","LOCALS",0)
+THEN
+	RESPONSE #100
+	NoAction()
+END
+
+// navigation
+
+IF	Global("NextDest","LOCALS",0)
+	GlobalGT("Start","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("NextDest","LOCALS",1)	
+	ChangeAIScript("Zy1800Ta",CLASS)		
+	Continue()
+END

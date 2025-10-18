@@ -1,0 +1,226 @@
+// map of dearnise keep
+// waypoint navigation
+// to be placed on Squad Markers
+
+IF	Global("RevealMap","Zy1304",0)
+THEN
+	RESPONSE #100
+	SetGlobal("RevealMap","Zy1304",1)
+	Explore()
+// set squads left in reserve
+	SetGlobal("ZyORReserveSquads","GLOBAL",40)
+	SetGlobal("ZyELReserveSquads","GLOBAL",24)
+// create Spawn Controllers and Assign Scripts
+	CreateCreature("Zy1304Wl",[0.0],0) 
+	ActionOverride("Zy1304Wl", ChangeAIScript("ZyELSPWN",CLASS) )
+	CreateCreature("Zy1304Wm",[0.0],0) 
+	ActionOverride("Zy1304Wm", ChangeAIScript("ZyORSPWN",CLASS) )
+// waypoints
+	CreateCreature("Zy1304Wa",[2545.1915],0) // courtyard
+	CreateCreature("Zy1304Wb",[3810.2825],0) // graveyard front
+	CreateCreature("Zy1304Wc",[1870.3300],0) // near camp entrance
+// elven spawns
+	CreateCreature("Zy1304Wd",[2580.1540],0) // door near Otyugh
+	ActionOverride("Zy1304Wd", ChangeAIScript("ZyELSPWP",CLASS) )
+	ActionOverride("Zy1304Wd", ChangeAIScript("Zy1304ET",OVERRIDE) )
+	CreateCreature("Zy1304We",[1720.1920],0) // door near dogs
+	ActionOverride("Zy1304We", ChangeAIScript("ZyELSPWP",CLASS) )
+	ActionOverride("Zy1304We", ChangeAIScript("Zy1304ET",OVERRIDE) )
+	CreateCreature("Zy1304Wf",[4135.2040],0) // east of graveyards
+//	ActionOverride("Zy1304Wf", ChangeAIScript("ZyELSPWP",CLASS) )
+// orc spawns
+	CreateCreature("Zy1304Wg",[1285.3420],0) // in encampment
+	ActionOverride("Zy1304Wg", ChangeAIScript("ZyORSPWP",CLASS) )
+	ActionOverride("Zy1304Wg", ChangeAIScript("Zy1304OT",OVERRIDE) )
+//	CreateCreature("Zy1304Wh",[1280.3105],0) // near secret door
+//	ActionOverride("Zy1304Wh", ChangeAIScript("ZyORSPWP",CLASS) )
+	CreateCreature("Zy1304Wi",[4940.3535],0) // southeast path
+	ActionOverride("Zy1304Wi", ChangeAIScript("ZyORSPWP",CLASS) )
+	ActionOverride("Zy1304Wi", ChangeAIScript("Zy1304OT",OVERRIDE) )
+	CreateCreature("Zy1304Wj",[3385.3750],0) // west of c
+	ActionOverride("Zy1304Wj", ChangeAIScript("ZyORSPWP",CLASS) )
+	ActionOverride("Zy1304Wj", ChangeAIScript("Zy1304OT",OVERRIDE) )
+	CreateCreature("Zy1304Wk",[4985.3850],0) // north of c
+//	ActionOverride("Zy1304Wk", ChangeAIScript("ZyORSPWP",CLASS) )
+
+// init each spawn point with relevant activation timers
+	ActionOverride("Zy1304Wd",SetGlobalTimer("MyOwnTimer","LOCALS",50) )
+	ActionOverride("Zy1304We",SetGlobalTimer("MyOwnTimer","LOCALS",0) )
+	ActionOverride("Zy1304Wg",SetGlobalTimer("MyOwnTimer","LOCALS",0) )
+	ActionOverride("Zy1304Wi",SetGlobalTimer("MyOwnTimer","LOCALS",40) )
+	ActionOverride("Zy1304Wj",SetGlobalTimer("MyOwnTimer","LOCALS",80) )
+	SetGlobal("ZyORCheckCommNum","GLOBAL",1)
+	SetGlobal("ZyELCheckCommNum","GLOBAL",1)
+	DisplayString(Myself, @251)
+	Continue()
+
+END
+
+// check comm num
+
+IF	Global("ZyELCheckCommNum","GLOBAL",1)
+	GlobalGT("ZyELCommInField","GLOBAL",5)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELCheckCommNum","GLOBAL",0)
+	SetGlobal("ZyELNeedMoreComm","GLOBAL",0)
+	Continue()
+END
+
+IF	Global("ZyELCheckCommNum","GLOBAL",1)
+	!GlobalGT("ZyELCommInField","GLOBAL",5)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELCheckCommNum","GLOBAL",0)
+	SetGlobal("ZyELNeedMoreComm","GLOBAL",1)
+	Continue()
+END
+
+IF	Global("ZyORCheckCommNum","GLOBAL",1)
+	GlobalGT("ZyORCommInField","GLOBAL",8)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORCheckCommNum","GLOBAL",0)
+	SetGlobal("ZyORNeedMoreComm","GLOBAL",0)
+	Continue()
+END
+
+IF	Global("ZyORCheckCommNum","GLOBAL",1)
+	!GlobalGT("ZyORCommInField","GLOBAL",8)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORCheckCommNum","GLOBAL",0)
+	SetGlobal("ZyORNeedMoreComm","GLOBAL",1)
+	Continue()
+END
+
+// orcish warnings
+
+IF	Global("RevealMap","Zy1304",1)
+	GlobalLT("ZyORReserveSquads","GLOBAL",31)
+	GlobalLT("ZyORWarning","Zy1304",1)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORWarning","Zy1304",1)
+	DisplayStringHead(Player1,@31) // three quarters of orcish squads are left in reserve
+END
+
+IF	Global("RevealMap","Zy1304",1)
+	GlobalLT("ZyORReserveSquads","GLOBAL",21)
+	GlobalLT("ZyORWarning","Zy1304",2)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORWarning","Zy1304",2)
+	DisplayStringHead(Player1,@32) // half of orcish squads are left in reserve
+END
+
+IF	Global("RevealMap","Zy1304",1)
+	GlobalLT("ZyORReserveSquads","GLOBAL",11)
+	GlobalLT("ZyORWarning","Zy1304",3)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORWarning","Zy1304",3)
+	DisplayStringHead(Player1,@33) // only a quarter of the orcish squads are left in reserve
+END
+
+IF	Global("RevealMap","Zy1304",1)
+	GlobalLT("ZyORReserveSquads","GLOBAL",1)
+	GlobalLT("ZyORWarning","Zy1304",4)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORWarning","Zy1304",4)
+	DisplayStringHead(Player1,@34) // the orcs have been defeated!
+	AddXPObject(Player1,160000)
+	AddXPObject(Player2,160000)
+	AddXPObject(Player3,160000)
+	AddXPObject(Player4,160000)
+	AddXPObject(Player5,160000)
+	AddXPObject(Player6,160000)
+END
+
+// elven warnings
+
+IF	Global("RevealMap","Zy1304",1)
+	GlobalLT("ZyELReserveSquads","GLOBAL",19)
+	GlobalLT("ZyELWarning","Zy1304",1)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELWarning","Zy1304",1)
+	DisplayStringHead(Player1,@41) // three quarters of elven squads are left in reserve
+END
+
+IF	Global("RevealMap","Zy1304",1)
+	GlobalLT("ZyELReserveSquads","GLOBAL",13)
+	GlobalLT("ZyELWarning","Zy1304",2)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELWarning","Zy1304",2)
+	DisplayStringHead(Player1,@42) // half of elven squads are left in reserve
+END
+
+IF	Global("RevealMap","Zy1304",1)
+	GlobalLT("ZyELReserveSquads","GLOBAL",7)
+	GlobalLT("ZyELWarning","Zy1304",3)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELWarning","Zy1304",3)
+	DisplayStringHead(Player1,@43) // only a quarter of the elven squads are left in reserve
+END
+
+IF	Global("RevealMap","Zy1304",1)
+	GlobalLT("ZyELReserveSquads","GLOBAL",1)
+	GlobalLT("ZyELWarning","Zy1304",4)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELWarning","Zy1304",4)
+	DisplayStringHead(Player1,@44) // the elves have been defeated!
+	AddXPObject(Player1,-96000)
+	AddXPObject(Player2,-96000)
+	AddXPObject(Player3,-96000)
+	AddXPObject(Player4,-96000)
+	AddXPObject(Player5,-96000)
+	AddXPObject(Player6,-96000)
+END
+
+
+// 4 ZyORSPWP - 4 orcish Spawn points, 11-14
+
+// a inside the camp   765.3295
+// b near the secret exit 1280.2905
+// c near the southeast entrance of the map  4940.3535
+// d just west of c   3385.3750
+// e just north of c 4985.2850
+
+// 3 ZyELSPWP - 3 Elven Spawn Points, 15-17
+
+// a at door near Otyugh  2355.1550
+// b at door near dogs  1735.1825
+// c north of orc spawn c, east of graveyards 4135.2040
+
+// 10 waypoints, 1-10 
+
+// 1 - in the courtyard 2360.1865
+// 2 - at the graveyard in front of the bridge  3810.2825
+// 3 - at western orcish spawnpoints intersection 1295.3150
+// 4 - 1/3 in between orcspa and orcspc  1720.3325
+// 5 - 2/3 in between orcspa and orcspc    2555.3270
+
+// Critical Points
+// 1 - guarding elven spawn points
+// 2 - in front of bridge
+// 3 - guarding orcish spawnpoints
+
+
+// Orcish waypoints
+// 11-12 move to 4 then 5
+// 13-14 move to 2, then if 4 or 5 under attack then help 5 and 4.
+// if clear, go direct to elven 15-16 and 1 
+
+// Elven waypoints
+// 15-16 move to 1     
+// 17 move to 2
+// if 1 15 16 are all clear, move to 2, else move to  1 15 16
+// if all clear, from 2 65% move to 5 then 4 then to 11 12 ; 35% to 13 14
+// guard 11 12 and 4, 13 14 and 2 
+
+

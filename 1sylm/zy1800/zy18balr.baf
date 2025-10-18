@@ -1,0 +1,111 @@
+// balrogscripts for Zy1800
+
+IF	Die()
+	Global("Iamattacking","LOCALS",0)
+	Global("MyDeathPays","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("MyDeathPays","LOCALS",1)
+	AddXPObject(Player1,30000)
+	AddXPObject(Player2,30000)
+	AddXPObject(Player3,30000)
+	AddXPObject(Player4,30000)
+	AddXPObject(Player5,30000)
+	AddXPObject(Player6,30000)
+	Continue()
+END
+
+IF	Die()
+	Global("MyDeathAdds","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("MyDeathAdds","LOCALS",1)
+	SetGlobalTimer("BalrogAttack","Zy1800",100)
+	IncrementGlobal("SetBalrogDialog","Zy1800",2)
+	Continue()
+END
+
+// assign talk scripts
+
+IF	Global("SetBalrogDialog","Zy1800",0)
+	Global("ZyMyDialog","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("SetBalrogDialog","Zy1800",1)
+	SetGlobal("ZyMyDialog","LOCALS",1)
+	SetDialog("Zy18BAL1")
+	FaceObject("Zy1800Wa")
+	StartDialogNoSet([PC])
+END
+
+IF	Global("SetBalrogDialog","Zy1800",2)
+	Global("ZyMyDialog","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("SetBalrogDialog","Zy1800",3)
+	SetGlobal("ZyMyDialog","LOCALS",2)
+	SetDialog("Zy18BAL2")
+	FaceObject("Zy1800Wa")
+	StartDialogNoSet([PC])
+END
+
+IF	Global("SetBalrogDialog","Zy1800",4)
+	Global("ZyMyDialog","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyMyDialog","LOCALS",3)
+	SetDialog("Zy18BAL3")
+	StartDialogNoSet([PC])
+	FaceObject("Zy1800Wa")
+END
+
+// 1st balrog attacks
+
+IF	Global("SetBalrogDialog","Zy1800",6)
+	Global("ZyMyDialog","LOCALS",3)
+	!See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	SetGlobal("Iamattacking","LOCALS",1)
+	MoveToObject("Zy1800Wa")
+END
+
+// 2nd balrog attacks / defends
+
+IF	GlobalLT("SetBalrogDialog","Zy1800",8)
+	Global("ZyMyDialog","LOCALS",2)
+	!See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	MoveToObject("Zy1800Wg")
+END
+
+IF	!GlobalLT("SetBalrogDialog","Zy1800",8)
+	!GlobalTimerNotExpired("BalrogAttack","Zy1800")
+	Global("ZyMyDialog","LOCALS",2)
+	!See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	SetGlobal("Iamattacking","LOCALS",1)
+	MoveToObject("Zy1800Wa")
+END
+
+// 3rd balrog attacks / defends
+
+IF	GlobalLT("SetBalrogDialog","Zy1800",10)
+	Global("ZyMyDialog","LOCALS",1)
+	!See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	MoveToObject("Zy1800Wi")
+END
+
+IF	!GlobalLT("SetBalrogDialog","Zy1800",10)
+	!GlobalTimerNotExpired("BalrogAttack","Zy1800")
+	Global("ZyMyDialog","LOCALS",1)
+	!See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	SetGlobal("Iamattacking","LOCALS",1)
+	MoveToObject("Zy1800Wa")
+END

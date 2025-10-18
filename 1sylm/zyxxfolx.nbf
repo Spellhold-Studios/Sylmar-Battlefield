@@ -1,0 +1,123 @@
+// for All Squad Members
+
+// 'xx - OR / EL
+// @ - Squad alpha
+// z#z - Squad number
+
+// removes the Ring that regenerates
+
+IF 	Global("ZyxxSL@Type","GLOBAL",0) 
+	HasItem("xtotake",Myself)
+THEN
+	RESPONSE #100
+	TakeItemReplace("xtogivex","xtotakex",Myself)
+	EquipItem("xtogivex")
+	Continue()
+END
+
+// if cannot see squad Marker, jump to near Squad Marker
+
+IF	!See(NearestEnemyOf(Myself))
+	!Detect("ZyxxSQM@")
+	GlobalGT("ZyxxSL@Type","GLOBAL",0) 
+THEN
+	RESPONSE #100
+	MoveGlobalObjectOffScreen(Myself,"ZyxxSQM@")
+	MoveToObjectFollow("ZyxxSQM@")
+	Continue()
+END
+
+// if near Squad Marker, move to Squad Marker
+
+IF	!See(NearestEnemyOf(Myself))
+	Detect("ZyxxSQM@")
+	GlobalGT("ZyxxSL@Type","GLOBAL",0) 
+THEN
+	RESPONSE #100
+	MoveToObjectFollow("ZyxxSQM@")
+	Continue()
+END
+
+// if hear leader call for help, protect leader
+// number = xshouthelpx
+
+IF	GlobalGT("ZyxxSL@Type","GLOBAL",0) 
+	Heard([ANYONE],xshouthelpx)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastAttackerOf(LastHeardBy(Myself)),30)
+	Continue()
+END
+
+// shouts when alerted of enemy and squad is not in combat
+
+IF	GlobalGT("ZyxxSL@Type","GLOBAL",0) 
+	Global("ZyxxSquad@InFight","GLOBAL",0)
+	See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	SetGlobal("ZyxxSquad@InFight","GLOBAL",1)
+	ActionOverride("ZyxxSQM@",SetGlobal("Stop","LOCALS",1))
+	Shout(xshoutatkx)
+	AttackReevaluate(LastSeenBy(Myself),30)
+	Continue()
+END
+
+// if hears partner alert, all focus fire on enemy
+// number = xshoutatkx
+
+IF	GlobalGT("ZyxxSL@Type","GLOBAL",0) 
+	Heard([ANYONE],xshoutatkx)
+THEN
+	RESPONSE #100
+	AttackReevaluate(LastTargetedBy(LastHeardBy(Myself)),30)
+	Continue()
+END
+
+// if commander is dead, set a Timer and then randomwalk()
+
+IF	Global("ZyxxSL@Type","GLOBAL",0) 
+	Global("RetreatTimerSet","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("RetreatTimerSet","LOCALS",1)
+	SetGlobalTimer("RetreatTimer","LOCALS",200) // 3 mins
+	Comntinue()
+END
+
+// randomly walk around before retreat timer expires
+
+IF	!GlobalTimerExpired("RetreatTimer","LOCALS")
+	Global("RetreatTimerSet","LOCALS",1)
+	!See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	RandomWalk()
+	Continue()
+END
+
+// EscapeArea if retreat timer expires
+
+IF	GlobalTimerExpired("RetreatTimer","LOCALS")
+	!See(NearestEnemyOf(Myself))
+THEN
+	RESPONSE #100
+	IncrementGlobal("ZyxxSQ@NumLeft","GLOBAL",-1)
+	EscapeArea()
+END
+
+// Testing spread-out
+/*
+IF	Global("ZyxxSquad@InFight","GLOBAL",0)
+	Range(NearestAllyOfMyself
+*/
+
+// adjusts variable indicative of how many squad members left
+
+IF 	Die()
+THEN
+	RESPONSE #100
+	IncrementGlobal("ZyxxSQ@NumLeft","GLOBAL",-1)
+END
+
+

@@ -1,0 +1,13 @@
+// DEFAULT ELF assigns the appropriate Leader file to the CRE
+
+IF	AreaCheck("Zy1800")
+THEN
+	RESPONSE #100
+	ChangeAIScript("ZyE1800L",OVERRIDE)
+END
+
+IF	AreaCheck("Zy1304")
+THEN
+	RESPONSE #100
+	ChangeAIScript("ZyE1304L",OVERRIDE)
+END

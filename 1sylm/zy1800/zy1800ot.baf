@@ -1,0 +1,64 @@
+// timer file for spawn points on map 1800 for Orcs
+
+// normal timer
+
+IF	GlobalsLT("ZyORCommInField","ZyELCommInField")
+	Global("MyOwnTimerSet","LOCALS",1)
+	GlobalGT("ZyORReserveSquads","GLOBAL",0)
+THEN
+	RESPONSE #100
+	SetGlobal("MyOwnTimerSet","LOCALS",0)
+	SetGlobalTimer("MyOwnTimer","LOCALS",30)
+END
+
+IF	!GlobalsLT("ZyORCommInField","ZyELCommInField")
+	!GlobalGT("ZyORCommInField","GLOBAL",3)
+	Global("MyOwnTimerSet","LOCALS",1)
+	GlobalGT("ZyORReserveSquads","GLOBAL",0)
+THEN
+	RESPONSE #100
+	SetGlobal("MyOwnTimerSet","LOCALS",0)
+	SetGlobalTimer("MyOwnTimer","LOCALS",60)
+END
+
+IF	!GlobalsLT("ZyORCommInField","ZyELCommInField")
+	GlobalGT("ZyORCommInField","GLOBAL",3)
+	Global("MyOwnTimerSet","LOCALS",1)
+	GlobalGT("ZyORReserveSquads","GLOBAL",0)
+THEN
+	RESPONSE #100
+	SetGlobal("MyOwnTimerSet","LOCALS",0)
+	SetGlobalTimer("MyOwnTimer","LOCALS",90)
+END
+
+// if no orcs are on the field and the orcs have not run out
+
+IF	Global("ZyORCommInField","GLOBAL",0)
+	GlobalGT("ZyORReserveSquads","GLOBAL",0)
+	!GlobalTimerNotExpired("ForceZeroTimer","LOCALS")
+THEN
+	RESPONSE #100
+	SetGlobal("MyOwnTimerSet","LOCALS",0)
+	SetGlobalTimer("ForceZeroTimer","LOCALS",15)
+	SetGlobalTimer("MyOwnTimer","LOCALS",1)
+END
+
+// after squads run out
+
+IF	!GlobalGT("ZyORCommInField","GLOBAL",3)
+	Global("MyOwnTimerSet","LOCALS",1)
+	!GlobalGT("ZyORReserveSquads","GLOBAL",0)
+THEN
+	RESPONSE #100
+	SetGlobal("MyOwnTimerSet","LOCALS",0)
+	SetGlobalTimer("MyOwnTimer","LOCALS",145)
+END
+
+IF	GlobalGT("ZyORCommInField","GLOBAL",3)
+	Global("MyOwnTimerSet","LOCALS",1)
+	!GlobalGT("ZyORReserveSquads","GLOBAL",0)
+THEN
+	RESPONSE #100
+	SetGlobal("MyOwnTimerSet","LOCALS",0)
+	SetGlobalTimer("MyOwnTimer","LOCALS",170)
+END

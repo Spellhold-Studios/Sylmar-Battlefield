@@ -1,0 +1,50 @@
+// ELVEN script for navigating Map 1304
+
+// jams here
+
+IF	Global("Start","LOCALS",0)
+THEN
+	RESPONSE #100
+	NoAction()
+END
+
+// navigation
+
+IF	Range("Zy1304Wa",8)
+	GlobalGT("Start","LOCALS",0)
+	Global("NextDest","LOCALS",1)
+THEN
+	RESPONSE #100
+	SetGlobal("NextDest","LOCALS",2)
+	ChangeAIScript("Zy1304Tb",CLASS)		
+	Continue()
+END
+
+IF	Range("Zy1304Wb",8)
+	GlobalGT("Start","LOCALS",0)
+	Global("NextDest","LOCALS",2)
+THEN
+	RESPONSE #100
+	SetGlobal("NextDest","LOCALS",3)
+	ChangeAIScript("Zy1304Tc",CLASS)		
+	Continue()
+END
+
+IF	Range("Zy1304Wc",8)
+	GlobalGT("Start","LOCALS",0)
+	Global("NextDest","LOCALS",3)
+THEN
+	RESPONSE #100
+	SetGlobal("NextDest","LOCALS",2)
+	ChangeAIScript("Zy1304Tb",CLASS)		
+	Continue()
+END
+
+IF	Global("NextDest","LOCALS",0)
+	GlobalGT("Start","LOCALS",0)
+THEN
+	RESPONSE #100
+	SetGlobal("NextDest","LOCALS",1)	
+	ChangeAIScript("Zy1304Ta",CLASS)		
+	Continue()
+END

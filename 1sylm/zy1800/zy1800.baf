@@ -1,0 +1,291 @@
+// map of dearnise keep
+// waypoint navigation
+// to be placed on Squad Markers
+
+IF	Global("RevealMap","Zy1800",0)
+THEN
+	RESPONSE #100
+	SetGlobal("RevealMap","Zy1800",1)
+	SetGlobal("ZyStartSampleBattlefield","GLOBAL",1)
+/*
+	ActionOverride(Player1,JumpToPoint([1600.525]))
+	ActionOverride(Player2,JumpToPoint([1560.485]))
+	ActionOverride(Player3,JumpToPoint([1640.565]))
+	ActionOverride(Player4,JumpToPoint([1640.485]))
+	ActionOverride(Player5,JumpToPoint([1600.445]))
+	ActionOverride(Player6,JumpToPoint([1680.605]))
+	ActionOverride(Player1,Face(2))
+	ActionOverride(Player2,Face(2))
+	ActionOverride(Player3,Face(2))
+	ActionOverride(Player4,Face(2))
+	ActionOverride(Player5,Face(2))
+	ActionOverride(Player6,Face(2))
+*/	
+	Explore()
+	MoveViewObject(Player1,INSTANT)
+// set squads left in reserve
+	SetGlobal("ZyORReserveSquads","GLOBAL",36) // 27
+	SetGlobal("ZyELReserveSquads","GLOBAL",16) // 12
+// create Spawn Controllers and Assign Scripts
+	CreateCreature("Zy1800Wl",[0.0],0) 
+	ActionOverride("Zy1800Wl", ChangeAIScript("ZyELSPWN",RACE) )
+	CreateCreature("Zy1800Wm",[0.0],0) 
+	ActionOverride("Zy1800Wm", ChangeAIScript("ZyORSPWN",RACE) )
+// waypoints
+	CreateCreature("Zy1800Wa",[1325.750],0) // graveyard front, 1535.575 [210.-175] 
+	CreateCreature("Zy1800Wb",[915.740],0) // gy west 670.595
+	CreateCreature("Zy1800Wc",[1090.930],0) // gy sw 890.1040
+	CreateCreature("Zy1800Wd",[1580.1030],0) // gy south 1790.1260
+// elven spawns
+	CreateCreature("Zy1800We",[1320.130],0) // gy north 1320.1220 
+	ActionOverride("Zy1800We", ChangeAIScript("ZyELSPWP",GENERAL) )
+	ActionOverride("Zy1800We", ChangeAIScript("Zy1800ET",RACE) )	
+	CreateCreature("Zy1800Wf",[2270.850],0) // gy east 2270.850
+	ActionOverride("Zy1800Wf", ChangeAIScript("ZyELSPWP",GENERAL) )
+	ActionOverride("Zy1800Wf", ChangeAIScript("Zy1800ET",RACE) )
+// orc spawns
+	CreateCreature("Zy1800Wg",[2265.1545],0) // map se 2265.1545
+	ActionOverride("Zy1800Wg", ChangeAIScript("ZyORSPWP",GENERAL) )
+	ActionOverride("Zy1800Wg", ChangeAIScript("Zy1800OT",RACE) )
+	CreateCreature("Zy1800Wh",[190.1350],0) // map sw 190.1350
+	ActionOverride("Zy1800Wh", ChangeAIScript("ZyORSPWP",GENERAL) )
+	ActionOverride("Zy1800Wh", ChangeAIScript("Zy1800OT",RACE) )
+	CreateCreature("Zy1800Wi",[150.130],0) // map nw 150.130
+	ActionOverride("Zy1800Wi", ChangeAIScript("ZyORSPWP",GENERAL) )
+	ActionOverride("Zy1800Wi", ChangeAIScript("Zy1800OT",RACE) )
+// summon warden
+	SetGlobal("ZyELCommInField","GLOBAL",1) // to account for Warden
+	CreateCreature("ZyELSQMa",[1450.630],0)	
+END
+
+IF	Global("ZyYouhavedeserted","GLOBAL",1)
+	Global("EKSSlain","Zy1800",0)
+THEN	
+	RESPONSE #100
+	SetGlobal("EKSSlain","Zy1800",1)
+	Continue()
+END
+
+IF	Global("SpawnWarden","Zy1800",1)
+THEN
+	RESPONSE #100
+	SetGlobal("SpawnWarden","Zy1800",2)
+	// init each spawn point with relevant activation timers
+	ActionOverride("Zy1800We",SetGlobalTimer("MyOwnTimer","LOCALS",90) )
+	ActionOverride("Zy1800Wf",SetGlobalTimer("MyOwnTimer","LOCALS",40) )
+	ActionOverride("Zy1800Wg",SetGlobalTimer("MyOwnTimer","LOCALS",0) )
+	ActionOverride("Zy1800Wh",SetGlobalTimer("MyOwnTimer","LOCALS",30) )
+	ActionOverride("Zy1800Wi",SetGlobalTimer("MyOwnTimer","LOCALS",60) )
+// start checks and prepare	
+	SetGlobal("ZyELCheckCommNum","GLOBAL",1)
+	SetGlobal("ZyORCheckCommNum","GLOBAL",1)
+//	DisplayString(Myself, @251)	
+	Continue()
+END
+
+IF	Global("WardenSlain","Zy1800",1)
+	Global("ZyElvesLose","Zy1800",0)
+	Global("ZyElvesWin","Zy1800",0)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyElvesLose","Zy1800",1)
+	SetGlobal("ZyStartSampleBattlefield","GLOBAL",2)
+	SetGlobal("ZyELflee","GLOBAL",1)
+	DisplayStringHead(Player1,@46) // warden dead
+	EraseJournalEntry(@500)
+	EraseJournalEntry(@501)
+	EraseJournalEntry(@502)
+	EraseJournalEntry(@503)
+	EraseJournalEntry(@504)
+	AddJournalEntry(@505,QUEST_DONE)
+	AddXPObject(Player1,-60000)
+	AddXPObject(Player2,-60000)
+	AddXPObject(Player3,-60000)
+	AddXPObject(Player4,-60000)
+	AddXPObject(Player5,-60000)
+	AddXPObject(Player6,-60000)
+	ReputationInc(-1)
+END
+
+// check comm num
+
+IF	Global("ZyELCheckCommNum","GLOBAL",1)
+	GlobalGT("ZyELCommInField","GLOBAL",2)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELCheckCommNum","GLOBAL",0)
+	SetGlobal("ZyELNeedMoreComm","GLOBAL",0)
+	Continue()
+END
+
+IF	Global("ZyELCheckCommNum","GLOBAL",1)
+	!GlobalGT("ZyELCommInField","GLOBAL",2)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELCheckCommNum","GLOBAL",0)
+	SetGlobal("ZyELNeedMoreComm","GLOBAL",1)
+	Continue()
+END
+
+IF	Global("ZyORCheckCommNum","GLOBAL",1)
+	GlobalGT("ZyORCommInField","GLOBAL",6)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORCheckCommNum","GLOBAL",0)
+	SetGlobal("ZyORNeedMoreComm","GLOBAL",0)
+	Continue()
+END
+
+IF	Global("ZyORCheckCommNum","GLOBAL",1)
+	!GlobalGT("ZyORCommInField","GLOBAL",6)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORCheckCommNum","GLOBAL",0)
+	SetGlobal("ZyORNeedMoreComm","GLOBAL",1)
+	Continue()
+END
+
+// orcish warnings
+
+IF	Global("RevealMap","Zy1800",1)
+	GlobalLT("ZyORReserveSquads","GLOBAL",28)
+	GlobalLT("ZyORWarning","Zy1800",1)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORWarning","Zy1800",1)
+	DisplayStringHead(Player1,@31) // three quarters of orcish squads are left in reserve
+END
+
+IF	Global("RevealMap","Zy1800",1)
+	GlobalLT("ZyORReserveSquads","GLOBAL",19)
+	GlobalLT("ZyORWarning","Zy1800",2)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORWarning","Zy1800",2)
+	DisplayStringHead(Player1,@32) // half of orcish squads are left in reserve
+END
+
+IF	Global("RevealMap","Zy1800",1)
+	GlobalLT("ZyORReserveSquads","GLOBAL",10)
+	GlobalLT("ZyORWarning","Zy1800",3)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORWarning","Zy1800",3)
+	DisplayStringHead(Player1,@33) // only a quarter of the orcish squads are left in reserve
+	CreateCreature("Zy1800Wk",[150.130],0) 
+	ActionOverride("Zy1800Wk", ChangeAIScript("ZyORLDSP",GENERAL) )
+	CreateCreature("Zy1800Wn",[2265.1545],0) 
+	ActionOverride("Zy1800Wn", ChangeAIScript("ZyORLDSP",GENERAL) )
+	CreateCreature("Zy1800Wo",[190.1550],0) 
+	ActionOverride("Zy1800Wo", ChangeAIScript("ZyORLDSP",GENERAL) )
+	CreateCreature("ZyObserv",[150.130],0)
+	ActionOverride("Zy1800Wk", SetGlobal("SpawnSquadLeader","LOCALS",12) )
+END
+
+IF	Global("SetBalrogDialog","Zy1800",1)
+THEN
+	RESPONSE #100
+	SetGlobal("SetBalrogDialog","Zy1800",2)
+	CreateCreature("ZyObserv",[2265.1545],0)
+	ActionOverride("Zy1800Wn", SetGlobal("SpawnSquadLeader","LOCALS",12) )	
+END
+
+IF	Global("SetBalrogDialog","Zy1800",3)
+THEN
+	RESPONSE #100
+	SetGlobal("SetBalrogDialog","Zy1800",4)
+	CreateCreature("ZyObserv",[190.1550],0)
+	ActionOverride("Zy1800Wo", SetGlobal("SpawnSquadLeader","LOCALS",12) )	
+END
+
+IF	Global("RevealMap","Zy1800",1)
+	GlobalLT("ZyORReserveSquads","GLOBAL",1)
+	GlobalLT("ZyORWarning","Zy1800",4)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyORWarning","Zy1800",4)
+	DisplayStringHead(Player1,@34) 
+	AddJournalEntry(@504,QUEST)
+END
+
+IF	GlobalGT("SetBalrogDialog","Zy1800",10)
+	Global("ZyElvesWin","Zy1800",0)
+	Global("ZyElvesLose","Zy1800",0)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyElvesWin","Zy1800",1)
+	SetGlobal("ZyStartSampleBattlefield","GLOBAL",2)
+	SetGlobal("ZyORflee","GLOBAL",1)
+	SetGlobal("ZyORReserveSquads","GLOBAL",0) 
+	DisplayStringHead(Player1,@45) // you are victorious!
+	AddXPObject(Player1,150000)
+	AddXPObject(Player2,150000)
+	AddXPObject(Player3,150000)
+	AddXPObject(Player4,150000)
+	AddXPObject(Player5,150000)
+	AddXPObject(Player6,150000)
+	ReputationInc(2)
+END
+
+// elven warnings
+
+IF	Global("RevealMap","Zy1800",1)
+	GlobalLT("ZyELReserveSquads","GLOBAL",13)
+	GlobalLT("ZyELWarning","Zy1800",1)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELWarning","Zy1800",1)
+	DisplayStringHead(Player1,@41) // three quarters of elven squads are left in reserve
+END
+
+IF	Global("RevealMap","Zy1800",1)
+	GlobalLT("ZyELReserveSquads","GLOBAL",9)
+	GlobalLT("ZyELWarning","Zy1800",2)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELWarning","Zy1800",2)
+	DisplayStringHead(Player1,@42) // half of elven squads are left in reserve
+END
+
+IF	Global("RevealMap","Zy1800",1)
+	GlobalLT("ZyELReserveSquads","GLOBAL",5)
+	GlobalLT("ZyELWarning","Zy1800",3)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELWarning","Zy1800",3)
+	DisplayStringHead(Player1,@43) // only a quarter of the elven squads are left in reserve
+	CreateCreature("Zy1800Wj",[1535.575],0) 
+	ActionOverride("Zy1800Wj", ChangeAIScript("ZyELLDSP",GENERAL) )
+	ActionOverride("Zy1800Wj", SetGlobal("SpawnSquadLeader","LOCALS",12) )	
+END
+
+IF	Global("EKSSlain","Zy1800",1)
+	Global("EKSHere","Zy1800",1)	
+	Global("ZyElvesLose","Zy1800",0)
+	Global("ZyElvesWin","Zy1800",0)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyElvesLose","Zy1800",1)
+	SetGlobal("ZyStartSampleBattlefield","GLOBAL",2)
+	SetGlobal("EKSSlain","Zy1800",2)
+	SetGlobal("ZyELflee","GLOBAL",1)
+	DisplayStringHead(Player1,@47) // shade dead
+	AddXPObject(Player1,-90000)
+	AddXPObject(Player2,-90000)
+	AddXPObject(Player3,-90000)
+	AddXPObject(Player4,-90000)
+	AddXPObject(Player5,-90000)
+	AddXPObject(Player6,-90000)
+	ReputationInc(-1)
+END
+
+IF	Global("RevealMap","Zy1800",1)
+	GlobalLT("ZyELReserveSquads","GLOBAL",1)
+	GlobalLT("ZyELWarning","Zy1800",4)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyELWarning","Zy1800",4)
+	DisplayStringHead(Player1,@44) 
+	AddJournalEntry(@503,QUEST)
+END
+

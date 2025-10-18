@@ -1,0 +1,25 @@
+// for deserting
+
+IF	GlobalLT("ZyORReserveSquads","GLOBAL",36)
+	GlobalGT("ZyORReserveSquads","GLOBAL",0)
+	Global("ZyStartSampleBattlefield","GLOBAL",1)
+	!AreaCheckObject("ZY1800",Player1)
+THEN
+	RESPONSE #100
+	SetGlobal("ZyStartSampleBattlefield","GLOBAL",2)
+	SetGlobal("ZyYouhavedeserted","GLOBAL",1)
+	DisplayStringHead(Player1,@53)
+	EraseJournalEntry(@500)
+	EraseJournalEntry(@501)
+	EraseJournalEntry(@502)
+	EraseJournalEntry(@503)
+	EraseJournalEntry(@504)
+	AddJournalEntry(@508,QUEST_DONE)
+	AddXPObject(Player1,-30000)
+	AddXPObject(Player2,-30000)
+	AddXPObject(Player3,-30000)
+	AddXPObject(Player4,-30000)
+	AddXPObject(Player5,-30000)
+	AddXPObject(Player6,-30000)
+	ReputationInc(-1)
+END
