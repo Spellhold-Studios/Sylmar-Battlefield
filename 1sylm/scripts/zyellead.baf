@@ -9,5 +9,5 @@ END
 IF	AreaCheck("Zy1304")
 THEN
 	RESPONSE #100
-	ChangeAIScript("ZyE1304L",OVERRIDE)
+	ChangeAIScript("zyel1304",OVERRIDE)
 END
