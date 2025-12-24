@@ -1,35 +1,58 @@
 BACKUP ~1Sylm\backup~
 AUTHOR ~zyraen@hotmail.com~
 
+VERSION ~1.03~
+
 README ~1Sylm/readme/readme-Sylm.%LANGUAGE%.txt~ ~1Sylm/readme/readme-Sylm.english.txt~
 
 ALWAYS
-	ACTION_DEFINE_ARRAY Ad_reload BEGIN
-	"setup.tra"
+
+
+	DEFINE_ACTION_FUNCTION autotra_workaround BEGIN
+	COPY ~%MOD_FOLDER%/Languages/English~				~weidu_external/%MOD_FOLDER%/Languages/autotra/%LANGUAGE%~
+	COPY ~%MOD_FOLDER%/Languages/%LANGUAGE%~				~weidu_external/%MOD_FOLDER%/Languages/autotra/%LANGUAGE%~
 	END
-	ACTION_DEFINE_ARRAY Ad_noconvert BEGIN END
-		LAF HANDLE_CHARSETS
-		INT_VAR
-		infer_charset = 1
-		STR_VAR
-		tra_path = EVAL ~%MOD_FOLDER%/tra~
-		noconvert_array = Ad_noconvert
-		reload_array = Ad_reload
+
+	LAF autotra_workaround END
+
+	ACTION_IF GAME_IS ~bgee eet~ BEGIN
+//  ACTION_DEFINE_ARRAY Zy_noconvert BEGIN END
+
+		ACTION_DEFINE_ARRAY Zy_reload BEGIN Setup ZY1800 END
+
+			LAF HANDLE_CHARSETS
+				INT_VAR
+				infer_charsets = 1
+				STR_VAR
+				tra_path = EVAL ~weidu_external/%MOD_FOLDER%/Languages/autotra~
+				out_path = EVAL ~weidu_external/%MOD_FOLDER%/Languages/autotra/UTF8~
+				iconv_path = ~1Sylm/Languages/autotra/iconv~
+				// noconvert_array = Zy_noconvert
+				reload_array = Zy_reload
+			END
+
+	// Backup ANSI
+	COPY ~weidu_external/%MOD_FOLDER%/Languages/autotra/%LANGUAGE%~			~weidu_external/%MOD_FOLDER%/Languages/autotra/ANSI/%LANGUAGE%~
+	// UTF8 only
+	COPY ~weidu_external/%MOD_FOLDER%/Languages/autotra/UTF8/%LANGUAGE%~			~weidu_external/%MOD_FOLDER%/Languages/autotra/%LANGUAGE%~
 	END
 END
 
-ASK_EVERY_COMPONENT
+AUTO_TRA ~weidu_external/1Sylm/Languages/autotra/%s~
 
 LANGUAGE ~English~ 	~english~ 
-					~1Sylm\tra\english\setup.tra~
-					~1Sylm\tra\english\setup-1Sylm.tra~
-					~1Sylm\tra\english\ZY1800.tra~
+					~1Sylm\Languages\english\setup.tra~
+					~1Sylm\Languages\english\ZY1800.tra~
 
+/*
 LANGUAGE ~Francais~ ~french~ 
-					~1Sylm\tra\french\setup.tra~
-								
+					~1Sylm\Languages\french\setup.tra~
+*/
 
 BEGIN @5000 /* Sylmar - Elves vs Orcs */
+DESIGNATED 0
+LABEL ~Zyraen-1Sylm~
+REQUIRE_PREDICATE GAME_IS ~tob bg2ee eet bgt~ ~This mod need BG2, BG2EE, BGT or EET~
 REQUIRE_FILE ~Data/25Dialog.bif~ @5001 /* You do not appear to have TOB installed. */ 
 
 APPEND ~stats.ids~ ~181 WIZARD_PROTECTION_FROM_NORMAL_WEAPONS~ UNLESS ~WIZARD_PROTECTION_FROM_NORMAL_WEAPONS~
@@ -70,6 +93,8 @@ SAY NAME1 @5005 /* Flaming Shield */
 COPY ~1Sylm\spl\ZyTRUSEE.SPL~ ~override~
 SAY NAME1 @5006 /* True Sight */
 
+COPY ~1Sylm\spl\ZySCHEAL.SPL~ ~override~
+
 // Map Zy1304                                                                                                                                                                        
 
 COMPILE ~1Sylm\scripts\Zy1304.BAF~
@@ -87,7 +112,7 @@ COPY ~1Sylm\ARE\Zy1800EE~ ~override~
 
 END
  
- ACTION_IF GAME_IS ~bg2 bgt~ THEN BEGIN
+ ACTION_IF GAME_IS ~tob bgt~ THEN BEGIN
  
 COPY ~1Sylm\ARE\Zy1800\Zy1800.ARE~ ~override~
 REPLACE_TEXTUALLY ~AM1800~ ~ZY1800~

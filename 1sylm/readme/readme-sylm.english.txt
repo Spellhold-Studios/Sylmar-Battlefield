@@ -1,6 +1,16 @@
 SYLMAR - Elves vs Orcs Battlefield
-v1.025
+v1.3
 by Zyraen (email : zyraen@hotmail.com )
+
+UPDATES
+
+- traification
+- PVRZ
+- Autotra
+- IconV
+- Label
+- Designated
+
 
 UPDATES / BUG FIXES from v 1.02
 
@@ -13,7 +23,8 @@ UPDATES / BUG FIXES from v 1.01
 
 UPDATES / BUG FIXES from v 1.00
 
-- Teleported directly to Zy1800, this should not cause the game to hang (tested by clearing the BG2/cache of AR1800.BIF)
+- Teleported direct
+ly to Zy1800, this should not cause the game to hang (tested by clearing the BG2/cache of AR1800.BIF)
 
 - Balrogs are now immune to Harm, Stun and Slow
 - Orcs will now spawn almost immediately if there are no orcs on the map

@@ -1,3 +1,97 @@
+@31 = ~Three quarters of the orcish army remains in reserve.~
+@32 = ~Half of the orcish army remains in reserve.~
+@33 = ~Only a quarter of the orcish army remains in reserve.~
+@34 = ~All nearby orcish squads have been deployed.~
+/*@31 = ~Les trois quarts de l'armée orque reste en réserve.~
+@32 = ~La moitié de l'armée orque reste en réserve.~
+@33 = ~Seul un quart de l'armée orque reste en réserve.~
+@34 = ~Toutes les escouades orques à proximité ont été déployées.~*/
+
+@41 = ~Three quarters of the elven army remains in reserve.~
+@42 = ~Half of the elven army remains in reserve.~
+@43 = ~Only a quarter of the elven army remains in reserve.~
+@44 = ~All nearby elven squads have been deployed.~
+@45 = ~The Balrogs have been slain and the elves have won!~
+@46 = ~The Warden has been slain and the elves are retreating!~
+@47 = ~The Elven King Shade has been slain and the elves are retreating!~
+
+@50 = ~Warden~
+@51 = ~Dance, Anguirel!~
+@52 = ~Unsummoned~
+@53 = ~You have left the elves in the lurch despite your agreement.~
+@54 = ~I return to my rest.~
+@55 = ~Apologies. Though I too wish for you remain, I simply cannot let you stay.~
+
+@101 = ~Keep the Warden alive at all costs until the battle is won.~
+@102 = ~Slay all the Balrogs to defeat the army and win the battle.~
+
+@251 = ~Initialisation completed.~
+
+@252 = ~A squad has been spawned.~
+@253 = ~A squad has been queued.~
+@255 = ~Spawn Completed.~
+@256 = ~I have a new member.~
+@257 = ~I have a full squad.~
+@258 = ~I have spawned my marker.~
+@259 = ~I am following my marker.~
+
+
+@500 = ~Aiding Sylmar - Keep the Warden Alive
+Help the elven forces destroy the orcs, as many as possible, until the commanders of the Orcish army are forced to show themselves. During this period of time, you must keep the Warden of the Elves alive.~
+
+@501 = ~Aiding Sylmar - Keep the Elven King Shade Alive
+The mighty Elven King Arveinas, with his dancing sword Anguirel, has risen as a Shade from his burial grounds to aid you in your desperate battle. However his spirit keeps the place hallowed, and you must keep him alive in order to win the battle. The Elven King Shade may not be healed of damage.~
+
+@502 = ~Aiding Sylmar - Slay the Balrogs
+After having defeated countless waves of orcs, the intelligence behind the brutish army has emerged - Balrogs, fiery fell demons of great cunning and evil. Destroy the three Balrogs, but each one is fearsome and deadly, so you may wish to take them on so only with sufficient troop support.~
+
+@503 = ~Aiding Sylmar - Elven Squad Reserves Depleted
+The reserve squads of the elves have been depleted, and henceforth new allied squads will enter the battlefield at a very slow rate. To have any hope of winning at all, you will need to conserve your troops better and keep the elven squad commanders alive.~
+
+@504 = ~Aiding Sylmar - Orcish Squad Reserves Depleted
+The reserve squads of the orcs have been depleted, and henceforth new enemy squads will enter the battlefield at a very slow rate. This would be the time to push forward and use your superior numbers to overwhelm the enemy, possibly by luring them to your gathering points.~
+
+@505 = ~Aiding the Sylmar Elves - Warden Slain
+With the death of the Elven leader, the elves rapidly retreat, leaving the orcs to desecrate the sacred grounds.~
+
+@506 = ~Aiding the Sylmar Elves - Elven King Shade Slain
+With the destruction of the Elven King Shade, the Warden calls a retreat, out of fear and also because there is no point defending the grounds further, with the essence that hallowed them now thoroughly unmade.~
+
+@507 = ~Aiding the Sylmar Elves - Balrogs Slain
+With the defeat of the Balrogs, the orcish forces rapidly retreat, leaving the elves to celebrate their triumph against overwhelming odds. You too have been rewarded and recognised for the considerable role you played in this desperate battle.~
+
+@508 = ~Aiding the Sylmar Elves - Desertion
+Deserting the elves you agreed to aid, is a callous and treacherous act that places a stain upon your name.~
+
+//@5000 = ~Sylmar - Elves vs Orcs~
+//@5001 = ~You do not appear to have TOB installed.~
+@5002 = ~Equip Shield~
+@5003 = ~Mass Regeneration~
+@5004 = ~Flaming Whip~
+@5005 = ~Flaming Shield~
+@5006 = ~True Sight~
+@5007 = ~Dancing Sword~
+@5008 = ~Denaton~
+@5009 = ~ZyELSQM ~
+@5010 = ~ZyELSQC ~
+@5011 = ~ZyORSQM ~
+@5012 = ~ZyORSQC ~
+@5013 = ~Zy1304WP~
+@5014 = ~Zy1800WP~
+@5015 = ~Elven Warrior~
+@5016 = ~Elven Sergeant~
+@5017 = ~Elven Lieutenant~
+@5018 = ~Elven Captain~
+@5019 = ~Elven General~
+@5020 = ~Orcish Warrior~
+@5021 = ~Orc Raider~
+@5022 = ~Orc Chieftain~
+@5023 = ~Orc Champion~
+@5024 = ~Orc Warlord~
+@5025 = ~Balrog~
+@5026 = ~Elven King Shade~
+
+
 @3000 = ~Will these humans keep me waiting forever? Any time now the orcs could be marching on my people's lands!~
 @3001 = ~Wait, you are <CHARNAME> are you not? Ah the Gods be praised, perhaps there is hope after all.~
 @3002 = ~Surely if there were a small band that could provide assistance, it would be none other than the ones who saw an end to the Iron Throne in the North. Just spare a moment to hear what I have to say.~
