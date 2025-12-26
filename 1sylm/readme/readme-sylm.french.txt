@@ -35,25 +35,25 @@ ly to Zy1800, this should not cause the game to hang (tested by clearing the BG2
 
 ===========
 
-Ce sc nario est cens   tre un pr curseur de ce qui est   venir dans le Silmarillion.
+Ce scénario est censé être un précurseur de ce qui est à venir dans le Silmarillion.
 
 1. Avertissement
-Ce readme a  t  fait dans la h te, il manque donc un peu de formatage standard. Tout cela sera corrig , ne vous inqui tez pas. 
+Ce readme a été fait dans la hâte, il manque donc un peu de formatage standard. Tout cela sera corrigé, ne vous inquiétez pas. 
 
-Notez que lorsque vous entrez dans la carte pour la premi re fois, le chargement prend un certain temps. Soyez patient et regarder l'herbe un peu plus longtemps.
+Notez que lorsque vous entrez dans la carte pour la première fois, le chargement prend un certain temps. Soyez patient et regarder l'herbe un peu plus longtemps.
 
-Notez  galement que cette carte peut encore n cessiter des ajustements pour des questions de difficult  et d' quilibre. N'h sitez pas   me faire part de vos commentaires en m'envoyant un e-mail ou en postant un message sur le sujet en SHS.
+Notez également que cette carte peut encore nécessiter des ajustements pour des questions de difficulté et d'équilibre. N'hésitez pas à me faire part de vos commentaires en m'envoyant un e-mail ou en postant un message sur le sujet en SHS.
 
 2. Contexte
-Le contexte est simple : vous acceptez d'aider un elfe au sujet d'une invasion sur leur terre sacr e, vous  tes alors t l port  jusqu'au site en question.
-L , vous aiderez un g n ral elfes, appel  Le Gardien,   rester en vie et   repousser des vagues successives d'Orques.   vos c t s, des escouades d'elfes appara tront  galement, mais   un rythme plus lent.
-Pour aider les elfes, il vous suffit de parler   Denaton qui attend impatiemment dans le b timent du Conseil des Six.
+Le contexte est simple : vous acceptez d'aider un elfe au sujet d'une invasion sur leur terre sacrée, vous êtes alors téléporté jusqu'au site en question.
+Là, vous aiderez un général elfes, appelé Le Gardien, à rester en vie et à repousser des vagues successives d'Orques. À vos côtés, des escouades d'elfes apparaîtront également, mais à un rythme plus lent.
+Pour aider les elfes, il vous suffit de parler à Denaton qui attend impatiemment dans le bâtiment du Conseil des Six.
 
-3. Probl mes de gameplay
+3. Problèmes de gameplay
 
 3.1 Fonctionnement des escouades
 
-Il y a un nombre fixe d'escouades qui vont "renforcer" chaque camp ; apr s cela, le taux d'apparition de nouveaux renforts est divis  par deux, ils mettront donc beaucoup de temps   arriver. Il est tr s important de savoir comment  liminer les forces ennemies, tout en conservant vos alli s. N'oubliez pas, vous devez  galement garder le gardien en vie   tout prix. Les escouades tournent autour des commandants,   savoir, les sergents, lieutenants, etc. pour les Elfes, et les chefs, champions et seigneurs de guerre du c t  des Orques.
+Il y a un nombre fixe d'escouades qui vont "renforcer" chaque camp ; après cela, le taux d'apparition de nouveaux renforts est divisé par deux, ils mettront donc beaucoup de temps à arriver. Il est très important de savoir comment éliminer les forces ennemies, tout en conservant vos alliés. N'oubliez pas, vous devez également garder le gardien en vie à tout prix. Les escouades tournent autour des commandants, à savoir, les sergents, lieutenants, etc. pour les Elfes, et les chefs, champions et seigneurs de guerre du côté des Orques.
 
 3.2 Objectives
 
@@ -160,15 +160,15 @@ I'm not sure how balanced it is, so just email me on the difficulty and I will t
 How do I give you a piece of my mind?
 Please email me or post it to the forum topic. All feedback and other pieces of mind are welcome. No flames please.
 
-5.0 Cr dits
+5.0 Crédits
 
-Ce n'est pas la liste compl te ^^; ; je suis press  et je ne peux pas vraiment penser clairement.
+Ce n'est pas la liste complète ^^; ; je suis pressé et je ne peux pas vraiment penser clairement.
 
-K'aeloree - pour l'h bergement du mod et pour m'avoir fait promettre une date de sortie, ainsi que pour les innombrables retours et son attention.
-Rabain - pour les encouragements, le soutien et les commentaires, surtout sur l' quilibre du mod dans le jeu.
-Archmage183 - pour ses id es sur le codage.
+K'aeloree - pour l'hébergement du mod et pour m'avoir fait promettre une date de sortie, ainsi que pour les innombrables retours et son attention.
+Rabain - pour les encouragements, le soutien et les commentaires, surtout sur l'équilibre du mod dans le jeu.
+Archmage183 - pour ses idées sur le codage.
 
-Il y a probablement beaucoup d'autres personnes qui ont aid  et soutenu ce projet, je voudrais tous vous remercier. Je reviendrai pour modifier ce readme, alors faites-moi savoir si je vous ai oubli . 
+Il y a probablement beaucoup d'autres personnes qui ont aidé et soutenu ce projet, je voudrais tous vous remercier. Je reviendrai pour modifier ce readme, alors faites-moi savoir si je vous ai oublié. 
 
-En attendant, j'aimerais aussi remercier tous ceux qui essaient ce mod, en particulier ceux qui me font part de leurs commentaires sur les probl mes et l' quilibre.
+En attendant, j'aimerais aussi remercier tous ceux qui essaient ce mod, en particulier ceux qui me font part de leurs commentaires sur les problèmes et l'équilibre.
 
